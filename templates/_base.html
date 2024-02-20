@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RFCFM | {% block title %}{% endblock %}</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kimeiga/bahunya/dist/bahunya.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    {% block js %}{% endblock %}
+</head>
+<body>
+    <nav>
+        <a href="{{ url_for('index') }}">Ramos</a>
+        <a href="{{ url_for('signup') }}">Registro</a>
+        <a href="{{ url_for('login') }}">Iniciar sesión</a>
+    </nav>
+
+    <main>{% block content %}{% endblock %}</main>
+
+    <section class="gui-toast-group">
+        <output class="gui-toast" role="status">Wizard Rose added to cart</output>
+        <output class="gui-toast" role="status">Self Watering Pot added to cart</output>
+    </section>
+</body>
+</html>
