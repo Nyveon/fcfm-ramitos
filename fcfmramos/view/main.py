@@ -2,13 +2,19 @@ from flask import Blueprint
 from flask import render_template, redirect, url_for
 
 from fcfmramos.view.auth import is_logged_in
+from fcfmramos.model import db
+from fcfmramos.model.course import Course
 
 bp = Blueprint("main", __name__)
 
 
 @bp.route("/")
 def index():
-    return render_template("index.html")
+    # get all courses from database sqlalchemy
+
+    courses = db.session.query(Course).all()
+
+    return render_template("index.html", courses=courses)
 
 
 @bp.route("/profile")

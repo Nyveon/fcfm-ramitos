@@ -4,5 +4,12 @@
 
 {% block content %}
     <h1>Ramos FCFM</h1>
-    <p>Bajo desarrollo</p>
+
+    <section>
+        {% for course in courses %}
+            <div>
+                <span>{{ course.code }} - {{ course.name }}</span>
+            </div>
+        {% endfor %}
+    </section>
 {% endblock %}
