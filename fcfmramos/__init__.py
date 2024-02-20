@@ -1,9 +1,7 @@
 from flask import Flask
 from flask import session
-from flask_sqlalchemy import SQLAlchemy
 
 from fcfmramos import config
-from fcfmramos.views import auth, main
 
 
 def create_app():
@@ -14,13 +12,14 @@ def create_app():
         SESSION_COOKIE_SECURE=True,
         SESSION_COOKIE_HTTPONLY=True,
         SESSION_COOKIE_SAMESITE="Strict",
-        SQLALCHEMY_DATABASE_URI="sqlite:///project.db",
+        SQLALCHEMY_DATABASE_URI="sqlite:///project.sqlite",
     )
 
-    db = SQLAlchemy(app)
+    from fcfmramos.model import db
+    db.init_app(app)
 
-    @app.before_first_request
-    def create_tables():
+    @app.cli.command()
+    def createdb():
         db.create_all()
 
     @app.context_processor
@@ -35,6 +34,7 @@ def create_app():
     def inject_verified():
         return dict(is_verified=auth.is_verified())
 
+    from fcfmramos.view import auth, main
     app.register_blueprint(main.bp)
     app.register_blueprint(auth.bp)
 

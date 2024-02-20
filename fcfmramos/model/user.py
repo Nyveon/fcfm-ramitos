@@ -1,4 +1,4 @@
-from fcfmramos import db
+from fcfmramos.model import db
 
 
 class User(db.Model):
