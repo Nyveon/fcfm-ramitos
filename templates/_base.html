@@ -11,17 +11,35 @@
     {% block js %}{% endblock %}
 </head>
 <body>
+    <section id="toaster" class="gui-toast-group">
+    </section>
     <nav>
         <a href="{{ url_for('index') }}">Ramos</a>
-        <a href="{{ url_for('signup') }}">Registro</a>
-        <a href="{{ url_for('login') }}">Iniciar sesión</a>
+
+        {% if is_logged_in %}
+            <a href="{{ url_for('profile') }}">Mis reseñas</a>
+            <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+        {% else %}
+            <a href="{{ url_for('signup') }}">Crear cuenta</a>
+            <a href="{{ url_for('login') }}">Iniciar sesión</a>
+        {% endif %}
     </nav>
 
     <main>{% block content %}{% endblock %}</main>
 
-    <section class="gui-toast-group">
-        <output class="gui-toast" role="status">Wizard Rose added to cart</output>
-        <output class="gui-toast" role="status">Self Watering Pot added to cart</output>
-    </section>
+    <script src="{{ url_for('static', filename='js/toast.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        newToast('{{ message }}', '{{ category }}');
+                    {% endfor %}
+                {% endif %} 
+            {% endwith %}
+        });
+    </script>
+
+    {{ username }}
 </body>
 </html>

@@ -55,3 +55,18 @@
 		--_travel-distance: 5vh;
 	}
 }
+
+.gui-toast-info {
+    background-color: #007bff;
+    color: white;
+}
+
+.gui-toast-error {
+    background-color: #dc3545;
+    color: white;
+}
+
+.gui-toast-success {
+    background-color: #28a745;
+    color: white;
+}

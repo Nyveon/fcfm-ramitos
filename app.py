@@ -2,7 +2,7 @@ import json
 
 from functools import wraps
 
-from flask import Flask, render_template, session, redirect, url_for
+from flask import Flask, render_template, session, redirect, url_for, flash
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, ValidationError
 from wtforms.validators import DataRequired, Email, Length
@@ -37,7 +37,6 @@ class LoginForm(FlaskForm):
 
 def validate_email_domain(form, field):
     if not field.data.endswith("@ug.uchile.cl"):
-        print("this")
         raise ValidationError("El correo debe terminar en @ug.uchile.cl")
 
 
@@ -52,11 +51,25 @@ class SignupForm(FlaskForm):
     submit = SubmitField("Crear cuenta")
 
 
+@app.context_processor
+def inject_logged_in():
+    return dict(is_logged_in=is_logged_in())
+
+
+@app.context_processor
+def get_username():
+    return dict(username=session.get("username", ""))
+
+
+def is_logged_in():
+    return "user" in session
+
+
 def login_required(f):
     @wraps(f)
     def wrap(*args, **kwargs):
         print(session)
-        if "user" not in session:
+        if not is_logged_in():
             return {"message": "Unauthorized"}, 401
         return f(*args, **kwargs)
 
@@ -68,6 +81,11 @@ def index():
     return render_template("index.html")
 
 
+@app.route("/profile")
+def profile():
+    return render_template("profile.html")
+
+
 @app.route("/userinfo")
 @login_required
 def userinfo():
@@ -77,6 +95,7 @@ def userinfo():
 def login_email_password(email, password):
     user = auth.sign_in_with_email_and_password(email, password)
     session["user"] = user["idToken"]
+    session["username"] = email.split("@")[0]
 
 
 @app.route("/signup", methods=["POST", "GET"])
@@ -93,10 +112,12 @@ def signup():
         try:
             auth.create_user_with_email_and_password(email, password)
             login_email_password(email, password)
-            return {"message": "Successfully created user"}, 200
+            flash("Cuenta creada", "success")
+            return redirect(url_for("index"))
         except Exception as e:
             print(e)
-            return {"message": "Error creating user"}, 400
+            flash("Error en creación de cuenta", "error")
+            return redirect(url_for("signup"))
 
     return render_template("signup.html", form=form)
 
@@ -112,10 +133,13 @@ def login():
         password = form.password.data
         try:
             login_email_password(email, password)
-            return {"message": "Login successful"}, 200
+
+            flash("Ingreso exitoso", "success")
+            return redirect(url_for("index"))
         except Exception as e:
             print(e)
-            return {"message": "Login failed"}, 400
+            flash("Error en inicio de sesión", "error")
+            return redirect(url_for("login"))
 
     return render_template("login.html", form=form)
 
@@ -123,6 +147,7 @@ def login():
 @app.route("/logout")
 def logout():
     session.clear()
+    flash("Sesión cerrada", "success")
     return redirect(url_for("index"))
 
 
