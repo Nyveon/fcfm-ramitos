@@ -1,0 +1,18 @@
+{% extends "_base.html" %}
+
+{% block title %}Mis reseñas{% endblock %}
+
+{% block content %}
+    <h1>Mis reseñas</h1>
+    {% if is_verified %}
+        <p>Estas son tus reseñas:</p>
+        <ul>
+            {% for review in reviews %}
+                <li>{{ review.title }} - {{ review.rating }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <strong>Por favor verifica tu correo para poder dejar reseñas.</strong>
+    {% endif %}
+{% endblock %}
+```

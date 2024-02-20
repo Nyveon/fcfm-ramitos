@@ -53,15 +53,28 @@ class SignupForm(FlaskForm):
 
 @app.context_processor
 def inject_logged_in():
+    is_verified()
     return dict(is_logged_in=is_logged_in())
 
 
 @app.context_processor
-def get_username():
+def inject_username():
     return dict(username=session.get("username", ""))
 
 
+@app.context_processor
+def inject_verified():
+    return dict(is_verified=is_verified())
+
+
+def is_verified():
+    if not is_logged_in():
+        return False
+    return auth.get_account_info(session["user"])["users"][0]["emailVerified"]
+
+
 def is_logged_in():
+    # Is email verified
     return "user" in session
 
 

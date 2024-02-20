@@ -15,12 +15,6 @@
             {% endfor %}
         </div>
         <div>
-            {{ form.username.label }}
-            {{ form.username(size=32) }}
-            {% for error in form.username.errors %}
-                <span style="color: red;">{{ error }}</span>
-            {% endfor %}
-        <div>
             {{ form.password.label }}<br>
             {{ form.password(size=32) }}<br>
             {% for error in form.password.errors %}
