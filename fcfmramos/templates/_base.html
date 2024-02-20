@@ -14,14 +14,14 @@
     <section id="toaster" class="gui-toast-group">
     </section>
     <nav>
-        <a href="{{ url_for('index') }}">Ramos</a>
+        <a href="{{ url_for('main.index') }}">Ramos</a>
 
         {% if is_logged_in %}
-            <a href="{{ url_for('profile') }}">Mi perfil</a>
-            <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+            <a href="{{ url_for('main.profile') }}">Mi perfil</a>
+            <a href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
         {% else %}
-            <a href="{{ url_for('signup') }}">Crear cuenta</a>
-            <a href="{{ url_for('login') }}">Iniciar sesión</a>
+            <a href="{{ url_for('auth.signup') }}">Crear cuenta</a>
+            <a href="{{ url_for('auth.login') }}">Iniciar sesión</a>
         {% endif %}
     </nav>
 

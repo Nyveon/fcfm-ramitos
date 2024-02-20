@@ -5,7 +5,7 @@
 {% block content %}
     <h1>Mis reseñas</h1>
     {% if is_verified %}
-        <a href="{{ url_for('forgot_password') }}">Cambiar contraseña</a>
+        <a href="{{ url_for('auth.forgot_password') }}">Cambiar contraseña</a>
 
         <p>Estas son tus reseñas:</p>
         <ul>

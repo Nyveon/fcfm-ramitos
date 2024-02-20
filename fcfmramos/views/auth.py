@@ -2,26 +2,16 @@ import json
 
 from functools import wraps
 
-from flask import Flask, render_template, session, redirect, url_for, flash
+from flask import session, redirect, flash, url_for, render_template
+from flask import Blueprint
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, ValidationError
 from wtforms.validators import DataRequired, Email, Length
 
 import pyrebase
-import firebase_admin
-from firebase_admin import credentials, auth, firestore
 
-import config
+bp = Blueprint("auth", __name__)
 
-
-app = Flask(__name__)
-app.secret_key = config.secret_key
-
-app.config.update(
-    SESSION_COOKIE_SECURE=True,
-    SESSION_COOKIE_HTTPONLY=True,
-    SESSION_COOKIE_SAMESITE="Strict",
-)
 
 firebase = pyrebase.initialize_app(json.load(open("fbconfig.json")))
 auth = firebase.auth()
@@ -61,28 +51,6 @@ class RecoverPasswordForm(FlaskForm):
     submit = SubmitField("Recuperar contraseña")
 
 
-@app.context_processor
-def inject_logged_in():
-    is_verified()
-    return dict(is_logged_in=is_logged_in())
-
-
-@app.context_processor
-def inject_username():
-    return dict(username=session.get("username", ""))
-
-
-@app.context_processor
-def inject_verified():
-    return dict(is_verified=is_verified())
-
-
-def is_verified():
-    if not is_logged_in():
-        return False
-    return auth.get_account_info(session["user"])["users"][0]["emailVerified"]
-
-
 def is_logged_in():
     # Is email verified
     return "user" in session
@@ -91,7 +59,6 @@ def is_logged_in():
 def login_required(f):
     @wraps(f)
     def wrap(*args, **kwargs):
-        print(session)
         if not is_logged_in():
             return {"message": "Unauthorized"}, 401
         return f(*args, **kwargs)
@@ -99,20 +66,10 @@ def login_required(f):
     return wrap
 
 
-@app.route("/")
-def index():
-    return render_template("index.html")
-
-
-@app.route("/profile")
-def profile():
-    return render_template("profile.html")
-
-
-@app.route("/userinfo")
-@login_required
-def userinfo():
-    return {"data": "gaming"}
+def is_verified():
+    if not is_logged_in():
+        return False
+    return auth.get_account_info(session["user"])["users"][0]["emailVerified"]
 
 
 def login_email_password(email, password):
@@ -121,7 +78,7 @@ def login_email_password(email, password):
     session["username"] = email.split("@")[0]
 
 
-@app.route("/signup", methods=["POST", "GET"])
+@bp.route("/signup", methods=["POST", "GET"])
 def signup():
     form = SignupForm()
 
@@ -144,10 +101,10 @@ def signup():
                     "Error en envío de correo, por favor contactar al admin",
                     "error",
                 )
-                return redirect(url_for("index"))
+                return redirect(url_for("main.index"))
 
             flash("Cuenta creada", "success")
-            return redirect(url_for("index"))
+            return redirect(url_for("main.index"))
         except Exception as e:
             print(e)
             flash("Error en creación de cuenta", "error")
@@ -156,7 +113,7 @@ def signup():
     return render_template("signup.html", form=form)
 
 
-@app.route("/forgot_password", methods=["POST", "GET"])
+@bp.route("/forgot_password", methods=["POST", "GET"])
 def forgot_password():
     form = RecoverPasswordForm()
 
@@ -165,7 +122,7 @@ def forgot_password():
         try:
             auth.send_password_reset_email(email)
             flash("Correo de recuperación enviado a tu correo", "success")
-            return redirect(url_for("index"))
+            return redirect(url_for("main.index"))
         except Exception as e:
             print(e)
             flash("Error en envío de correo de recuperación", "error")
@@ -174,7 +131,7 @@ def forgot_password():
     return render_template("forgot_password.html", form=form)
 
 
-@app.route("/login", methods=["POST", "GET"])
+@bp.route("/login", methods=["POST", "GET"])
 def login():
     form = LoginForm()
     if "user" in session:
@@ -187,7 +144,7 @@ def login():
             login_email_password(email, password)
 
             flash("Ingreso exitoso", "success")
-            return redirect(url_for("index"))
+            return redirect(url_for("main.index"))
         except Exception as e:
             print(e)
             flash("Error en inicio de sesión", "error")
@@ -196,17 +153,8 @@ def login():
     return render_template("login.html", form=form)
 
 
-@app.route("/logout")
+@bp.route("/logout")
 def logout():
     session.clear()
     flash("Sesión cerrada", "success")
-    return redirect(url_for("index"))
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
-
-# user = auth.sign_in_with_email_and_password(email, password)
-# auth.get_account_info(user['idToken'])
-# auth.send_email_verificaction(user['idToken'])
-# auth.send_password_reset_email(email)
+    return redirect(url_for("main.index"))
