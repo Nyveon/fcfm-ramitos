@@ -8,6 +8,8 @@ from wtforms import StringField, PasswordField, SubmitField, ValidationError
 from wtforms.validators import DataRequired, Email, Length
 
 import pyrebase
+import firebase_admin
+from firebase_admin import credentials, auth, firestore
 
 import config
 
@@ -49,6 +51,14 @@ class SignupForm(FlaskForm):
         "Contraseña", validators=[DataRequired(), Length(min=8)]
     )
     submit = SubmitField("Crear cuenta")
+
+
+class RecoverPasswordForm(FlaskForm):
+    email = StringField(
+        "Correo (@ug.uchile.cl)",
+        validators=[DataRequired(), Email(), validate_email_domain],
+    )
+    submit = SubmitField("Recuperar contraseña")
 
 
 @app.context_processor
@@ -125,6 +135,17 @@ def signup():
         try:
             auth.create_user_with_email_and_password(email, password)
             login_email_password(email, password)
+
+            try:
+                auth.send_email_verification(session["user"])
+            except Exception as e:
+                print(e)
+                flash(
+                    "Error en envío de correo, por favor contactar al admin",
+                    "error",
+                )
+                return redirect(url_for("index"))
+
             flash("Cuenta creada", "success")
             return redirect(url_for("index"))
         except Exception as e:
@@ -133,6 +154,24 @@ def signup():
             return redirect(url_for("signup"))
 
     return render_template("signup.html", form=form)
+
+
+@app.route("/forgot_password", methods=["POST", "GET"])
+def forgot_password():
+    form = RecoverPasswordForm()
+
+    if form.validate_on_submit():
+        email = form.email.data
+        try:
+            auth.send_password_reset_email(email)
+            flash("Correo de recuperación enviado a tu correo", "success")
+            return redirect(url_for("index"))
+        except Exception as e:
+            print(e)
+            flash("Error en envío de correo de recuperación", "error")
+            return redirect(url_for("forgot_password"))
+
+    return render_template("forgot_password.html", form=form)
 
 
 @app.route("/login", methods=["POST", "GET"])
