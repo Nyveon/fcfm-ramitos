@@ -1,9 +1,9 @@
 {% extends "_base.html" %}
 
-{% block title %}Crear Cuenta{% endblock %}
+{% block title %}Ingreso{% endblock %}
 
 {% block content %}
-    <h2>Crear cuenta</h2>
+    <h2>Ingreso</h2>
     <form method="post">
         {{ form.hidden_tag() }}
 
@@ -15,13 +15,14 @@
             {% endfor %}
         </div>
         <div>
-            {{ form.password.label }}<br>
-            {{ form.password(size=32) }}<br>
+            {{ form.password.label }}
+            {{ form.password(size=32) }}
             {% for error in form.password.errors %}
                 <span style="color: red;">{{ error }}</span>
             {% endfor %}
         </div>
-
         <div>{{ form.submit() }}</div>
     </form>
+
+    <a href="{{ url_for('auth.forgot_password') }}">Recuperar contraseña</a>
 {% endblock %}

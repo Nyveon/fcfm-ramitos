@@ -4,26 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RFCFM | {% block title %}{% endblock %}</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200..1000&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kimeiga/bahunya/dist/bahunya.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    {% block css %}{% endblock %}
 
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     {% block js %}{% endblock %}
 </head>
 <body>
     <section id="toaster" class="gui-toast-group">
     </section>
-    <nav>
-        <a href="{{ url_for('main.index') }}">Ramos</a>
 
-        {% if is_logged_in %}
-            <a href="{{ url_for('main.profile') }}">Mi perfil</a>
-            <a href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
-        {% else %}
-            <a href="{{ url_for('auth.signup') }}">Crear cuenta</a>
-            <a href="{{ url_for('auth.login') }}">Iniciar sesión</a>
-        {% endif %}
-    </nav>
+    {% include '/partials/_header.html' %}
 
     <main>{% block content %}{% endblock %}</main>
 

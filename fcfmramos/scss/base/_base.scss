@@ -1,0 +1,76 @@
+@use "../abstracts/colors" as c;
+@use "../abstracts/mixins" as m;
+
+
+
+body {
+    @include m.flex-container(column, flex-start, center);
+
+    height: 100vh;
+    width: auto !important;
+    scroll-behavior: smooth;
+
+    word-wrap: break-word;
+    text-rendering: optimizeLegibility;
+
+    color: c.$text;
+    background-color: c.$background;
+
+    margin: 0 12%;
+
+    @media screen and (max-width: 1000px) {
+        margin: 0 3%;
+    }
+}
+
+main {
+    @include m.flex-container(column, flex-start, center);
+    width: 100%;
+    margin: 5rem;
+}
+
+section {
+    @include m.flex-container(column, center, center);
+    width: 100%;
+    gap: 2rem;
+}
+
+a {
+    // background-position-y: 0%;
+    // background-image: linear-gradient(180deg, transparent 0%, transparent 50%, c.$accent 50%);
+    // transition: all 0.2s ease;
+    // background-size: auto 190%;
+
+    position: relative;
+    text-decoration: none;
+    color: c.$accent;
+
+    &:hover::before {
+        transform: scaleX(1);
+    }
+
+    &::before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        background-color: c.$accent;
+        transform: scaleX(0);
+        transform-origin: center;
+        transition: transform 0.2s ease;
+    }
+
+    &.right {
+        &::before {
+            transform-origin: right;
+        }
+    }
+
+    &.left {
+        &::before {
+            transform-origin: left;
+        }
+    }
+}

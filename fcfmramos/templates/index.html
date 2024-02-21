@@ -2,14 +2,58 @@
 
 {% block title %}Home{% endblock %}
 
+
 {% block content %}
     <h1>Ramos FCFM</h1>
 
-    <section>
-        {% for course in courses %}
-            <div>
-                <span>{{ course.code }} - {{ course.name }}</span>
-            </div>
-        {% endfor %}
+    <section x-data="loadCourses()">
+
+        <input
+            x-ref="searchField"
+            x-model="search"
+            x-on:keydown.window.prevent.slash="$refs.searchField.focus()"
+            placeholder="Buscar un curso..."
+            type="search"
+        />
+        
+        <div id="courses">
+            <template x-for="course in filteredCourses" :key="course.id">
+                <div class="course-card">
+                    <div class="course-top-bar">
+                        <span class="course-code" x-text="course.code"></span>
+                        <span class="course-stars">★★★★★</span>
+                    </div>
+                    <span class="course-name" x-text="course.name"></span>
+                </div>
+            </template>
+        </div>
+
+        <script>
+            function normalize(string) {
+                return string.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+            }
+
+            function loadCourses() {
+                return {
+                    search: "",
+                    myForData: sourceData,
+                    get filteredCourses() {
+                        console.log(this.search);
+
+                        if (!this.search) {
+                            return this.myForData;
+                        }
+
+                        const searchString = normalize(this.search)
+
+                        return this.myForData.filter((item) => {
+                            return normalize(item.name).includes(searchString) || normalize(item.code).includes(searchString);
+                        });
+                    }
+                }
+            }
+
+            const sourceData = {{ courses | tojson | safe }};
+        </script>
     </section>
 {% endblock %}

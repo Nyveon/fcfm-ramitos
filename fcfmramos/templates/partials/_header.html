@@ -1,0 +1,27 @@
+<header>
+	<nav>
+		<div>
+			<a href="{{ url_for('main.index') }}" class="left"
+				><strong>Ramos FCFM</strong></a
+			>
+		</div>
+
+		<div>
+			{% if is_logged_in %}
+			<div>
+				<a href="{{ url_for('main.profile') }}" class="right">Mi perfil</a>
+			</div>
+			<div>
+				<a href="{{ url_for('auth.logout') }}" class="right">Cerrar sesión</a>
+			</div>
+			{% else %}
+			<div>
+				<a href="{{ url_for('auth.signup') }}" class="right">Crear cuenta</a>
+			</div>
+			<div>
+				<a href="{{ url_for('auth.login') }}" class="right">Iniciar sesión</a>
+			</div>
+			{% endif %}
+		</div>
+	</nav>
+</header>

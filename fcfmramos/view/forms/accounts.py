@@ -10,7 +10,9 @@ def validate_email_domain(form, field):
 
 class LoginForm(FlaskForm):
     email = StringField(
-        "Correo (@ug.uchile.cl)", validators=[DataRequired(), Email()]
+        "Correo",
+        render_kw={"placeholder": "nombre.apellido@ug.uchile.cl"},
+        validators=[DataRequired(), Email()]
     )
     password = PasswordField(
         "Contraseña", validators=[DataRequired(), Length(min=8)]
@@ -20,7 +22,8 @@ class LoginForm(FlaskForm):
 
 class SignupForm(FlaskForm):
     email = StringField(
-        "Correo (@ug.uchile.cl)",
+        "Correo",
+        render_kw={"placeholder": "nombre.apellido@ug.uchile.cl"},
         validators=[DataRequired(), Email(), validate_email_domain],
     )
     password = PasswordField(
@@ -32,6 +35,7 @@ class SignupForm(FlaskForm):
 class RecoverPasswordForm(FlaskForm):
     email = StringField(
         "Correo (@ug.uchile.cl)",
+        render_kw={"placeholder": "nombre.apellido@ug.uchile.cl"},
         validators=[DataRequired(), Email(), validate_email_domain],
     )
     submit = SubmitField("Recuperar contraseña")

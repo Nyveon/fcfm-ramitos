@@ -108,6 +108,7 @@ def signup():
 
     if form.validate_on_submit():
         email = form.email.data
+        # todo: if no @, insert @ug.uchile.cl
         password = form.password.data
 
         try:
@@ -131,7 +132,7 @@ def signup():
             flash("Error en creación de cuenta", "error")
             return redirect(url_for("auth.signup"))
 
-    return render_template("signup.html", form=form)
+    return render_template("auth/signup.html", form=form)
 
 
 @bp.route("/forgot_password", methods=["POST", "GET"])
@@ -149,7 +150,7 @@ def forgot_password():
             flash("Error en envío de correo de recuperación", "error")
             return redirect(url_for("auth.forgot_password"))
 
-    return render_template("forgot_password.html", form=form)
+    return render_template("auth/forgot_password.html", form=form)
 
 
 @bp.route("/login", methods=["POST", "GET"])
@@ -171,7 +172,7 @@ def login():
             flash("Error en inicio de sesión", "error")
             return redirect(url_for("auth.login"))
 
-    return render_template("login.html", form=form)
+    return render_template("auth/login.html", form=form)
 
 
 @bp.route("/logout")

@@ -23,10 +23,12 @@ SEMESTERS = [
     20172,
     20171,
     20162,
-    20161
+    20161,
 ]
 DEPARTMENTS = [
-    Departamento(5, "Departamento de Ciencias de la Computación", "CC", "FFFFFF"),
+    Departamento(
+        5, "Departamento de Ciencias de la Computación", "CC", "FFFFFF"
+    ),
 ]
 
 
@@ -44,7 +46,9 @@ async def main():
 
     for semester in SEMESTERS:
         for department in DEPARTMENTS:
-            catalogos.append(await scrape_catalogo(client, semester, department))
+            catalogos.append(
+                await scrape_catalogo(client, semester, department)
+            )
 
     return catalogos
 

@@ -1,7 +1,14 @@
 from bs4 import BeautifulSoup, element
 
 from fcfmramos.web_scraper.client import Client
-from fcfmramos.web_scraper.ucampus import get_catalogo_url, Catalogo, Ramo, Curso, Profesor, Departamento
+from fcfmramos.web_scraper.ucampus import (
+    get_catalogo_url,
+    Catalogo,
+    Ramo,
+    Curso,
+    Profesor,
+    Departamento,
+)
 
 
 async def scrape(client: Client, url: str) -> BeautifulSoup:
@@ -12,11 +19,7 @@ async def scrape(client: Client, url: str) -> BeautifulSoup:
 
 
 def extract_programa_id(url: str) -> int | None:
-    return (
-        None
-        if not url
-        else int(url[url.find("id=") + 3:])
-    )
+    return None if not url else int(url[url.find("id=") + 3:])
 
 
 def text_from_dt_dd(dl: element.Tag, title: str) -> str | None:
@@ -42,7 +45,8 @@ def get_ramo_codigo(element: element.Tag) -> str:
 def get_ramo_nombre(element: element.Tag) -> str:
     return (
         element.find("h1")
-        .text.strip().splitlines()[0]
+        .text.strip()
+        .splitlines()[0]
         .replace(get_ramo_codigo(element), "", 1)  # todo: inefficient
         .strip()
     )
@@ -66,9 +70,7 @@ def get_ramo_equivalencias(element: element.Tag) -> list[str] | None:
     ramo_dl = element.find("dl", class_="leyenda")
     equivalencias_string = text_from_dt_dd(ramo_dl, "Equivalencias")
     return (
-        None
-        if not equivalencias_string
-        else equivalencias_string.split("/")
+        None if not equivalencias_string else equivalencias_string.split("/")
     )
 
 
@@ -156,7 +158,7 @@ async def scrape_catalogo(
                     get_curso_modalidad(curso_tds[0]),
                     get_curso_comentario(curso_tds[0]),
                     get_curso_profesores(curso_tds[0]),
-                    get_curso_horarios(curso_tds[3])
+                    get_curso_horarios(curso_tds[3]),
                 )
             )
 

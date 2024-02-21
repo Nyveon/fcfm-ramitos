@@ -1,0 +1,37 @@
+@use "../abstracts/colors" as c;
+@use "../abstracts/mixins" as m;
+
+form {
+    @include m.flex-container(column, flex-start, center);
+    gap: 2rem;
+    padding: 1rem;
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background: c.$background-primary;
+    width: 100%;
+    max-width: 30rem;
+    margin: 2rem auto;
+    label {
+        vertical-align: middle;
+        margin-bottom: 4px;
+        display: inline-block;
+    }
+
+    input[type="submit"] {
+        background: c.$background-primary;
+        border: 1px solid rgb(48, 54, 61);
+        color: c.$text;
+        margin-right: 0.5rem;
+        margin-bottom: 0.5rem;
+        padding: 5px 16px;
+        border-radius: 6px;
+        outline: none;
+    }
+
+    >div {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+}

@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 from fcfmramos.model import db
 
 
@@ -9,12 +11,13 @@ class Department(db.Model):
     color = db.Column(db.String(6), nullable=True)
 
 
+@dataclass
 class Course(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(128), nullable=False)
-    code = db.Column(db.String(128), unique=True, nullable=False)
-    department = db.Column(
+    id: int = db.Column(db.Integer, primary_key=True)
+    name: str = db.Column(db.String(128), nullable=False)
+    code: str = db.Column(db.String(128), unique=True, nullable=False)
+    department: int = db.Column(
         db.Integer, db.ForeignKey("department.id"), nullable=False
     )
-    sct = db.Column(db.Integer, nullable=False)
-    requisitos = db.Column(db.String(128), nullable=False)
+    sct: int = db.Column(db.Integer, nullable=False)
+    requisitos: str = db.Column(db.String(128), nullable=False)

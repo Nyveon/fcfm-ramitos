@@ -1,0 +1,54 @@
+@use "../abstracts/colors" as c;
+
+input {
+	color: c.$text;
+	background-color: c.$background;
+	font-family: inherit;
+	font-size: inherit;
+	margin-right: 6px;
+	margin-bottom: 6px;
+	padding: 10px;
+	border: none;
+	border-radius: 6px;
+	outline: none;
+	border: 1px solid rgb(33, 38, 45);
+
+	&:focus {
+		border: 1px solid c.$accent;
+		box-shadow: 0 0 3px c.$accent;
+	}
+
+	&::placeholder {
+		color: c.$text-light;
+	}
+
+	&:hover {
+		box-shadow: 0 0 3px c.$accent;
+		filter: brightness(115%);
+	}
+}
+
+label {
+	vertical-align: middle;
+	margin-bottom: 4px;
+	display: inline-block;
+}
+
+input[type="submit"] {
+	background: c.$background-primary;
+	border: 1px solid rgb(48, 54, 61);
+	color: c.$text;
+	margin-right: 0.5rem;
+	margin-bottom: 0.5rem;
+	padding: 5px 16px;
+	border-radius: 6px;
+	outline: none;
+}
+
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+input[type="button"]:hover,
+button:hover {
+	box-shadow: 0 0 3px c.$accent;
+}
+

@@ -1,0 +1,32 @@
+@use "../abstracts/mixins" as m;
+@use "../abstracts/colors" as c;
+
+nav {
+    @include m.flex-container(row, space-between, center);
+    height: 3.5rem;
+    padding: 0.5rem 12%;
+
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+    background: c.$background-primary;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+
+    >div {
+        @include m.flex-container(row, flex-end, center);
+        gap: 10%;
+
+        >div {
+            white-space: nowrap;
+        }
+    }
+
+    a {
+        color: c.$text;
+    }
+}
