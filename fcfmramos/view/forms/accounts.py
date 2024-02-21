@@ -3,6 +3,10 @@ from wtforms import StringField, PasswordField, SubmitField, ValidationError
 from wtforms.validators import DataRequired, Email, Length
 
 
+INVALID_EMAIL = "Correo inválido"
+PLACEHOLDER_EMAIL = {"placeholder": "nombre.apellido@ug.uchile.cl"}
+
+
 def validate_email_domain(form, field):
     if not field.data.endswith("@ug.uchile.cl"):
         raise ValidationError("El correo debe terminar en @ug.uchile.cl")
@@ -11,8 +15,8 @@ def validate_email_domain(form, field):
 class LoginForm(FlaskForm):
     email = StringField(
         "Correo",
-        render_kw={"placeholder": "nombre.apellido@ug.uchile.cl"},
-        validators=[DataRequired(), Email()]
+        render_kw=PLACEHOLDER_EMAIL,
+        validators=[DataRequired(), Email(INVALID_EMAIL)],
     )
     password = PasswordField(
         "Contraseña", validators=[DataRequired(), Length(min=8)]
@@ -23,8 +27,12 @@ class LoginForm(FlaskForm):
 class SignupForm(FlaskForm):
     email = StringField(
         "Correo",
-        render_kw={"placeholder": "nombre.apellido@ug.uchile.cl"},
-        validators=[DataRequired(), Email(), validate_email_domain],
+        render_kw=PLACEHOLDER_EMAIL,
+        validators=[
+            DataRequired(),
+            Email(INVALID_EMAIL),
+            validate_email_domain,
+        ],
     )
     password = PasswordField(
         "Contraseña", validators=[DataRequired(), Length(min=8)]
@@ -35,7 +43,11 @@ class SignupForm(FlaskForm):
 class RecoverPasswordForm(FlaskForm):
     email = StringField(
         "Correo (@ug.uchile.cl)",
-        render_kw={"placeholder": "nombre.apellido@ug.uchile.cl"},
-        validators=[DataRequired(), Email(), validate_email_domain],
+        render_kw=PLACEHOLDER_EMAIL,
+        validators=[
+            DataRequired(),
+            Email(INVALID_EMAIL),
+            validate_email_domain,
+        ],
     )
     submit = SubmitField("Recuperar contraseña")

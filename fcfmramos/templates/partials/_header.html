@@ -1,6 +1,9 @@
 <header>
 	<nav>
 		<div>
+            <img src="{{ url_for('static', filename='img/logo.png') }}" id="logo" alt="" width="64" height="64"
+                onClick="window.location.href='{{ url_for('main.index') }}'"
+            >
 			<a href="{{ url_for('main.index') }}" class="left"
 				><strong>Ramos FCFM</strong></a
 			>
