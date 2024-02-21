@@ -3,7 +3,7 @@ from flask import render_template, redirect, url_for
 
 from fcfmramos.view.auth import is_logged_in
 from fcfmramos.model import db
-from fcfmramos.model.course import Course
+from fcfmramos.model.course import Curso
 
 bp = Blueprint("main", __name__)
 
@@ -12,7 +12,7 @@ bp = Blueprint("main", __name__)
 def index():
     # get all courses from database sqlalchemy
 
-    courses = db.session.query(Course).all()
+    courses = db.session.query(Curso).all()
 
     return render_template("index.html", courses=courses)
 

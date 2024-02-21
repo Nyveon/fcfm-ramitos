@@ -1,8 +1,15 @@
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column
+from datetime import datetime
+
 from fcfmramos.model import db
 
 
 class User(db.Model):
-    id = db.Column(db.String(255), primary_key=True)
-    email = db.Column(db.String(100), unique=True, nullable=False)
-    username = db.Column(db.String(100), unique=True, nullable=False)
-    email_verified = db.Column(db.Boolean, nullable=False, default=False)
+    __tablename__ = "users"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    email: Mapped[str] = mapped_column(String(100), unique=True)
+    username: Mapped[str] = mapped_column(String(24), unique=True)
+    email_verified: Mapped[bool] = mapped_column(default=False)
+    registration_date: Mapped[datetime]

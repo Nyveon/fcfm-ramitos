@@ -1,5 +1,3 @@
-import asyncio
-
 from flask import Flask
 from flask import session
 
@@ -18,8 +16,9 @@ def create_app():
     )
 
     from fcfmramos.model import db
-
+    from flask_migrate import Migrate
     db.init_app(app)
+    migrate = Migrate(app, db)
 
     @app.cli.command()
     def createdb():
@@ -46,41 +45,9 @@ def create_app():
 
     @app.cli.command()
     def runscraper():
-        from fcfmramos.web_scraper.main import main
-        from fcfmramos.model.course import Course, Department
+        from fcfmramos.populate import populate
 
-        catalogos = asyncio.run(main())
-
-        for catalogo in catalogos:
-            department = Department.query.filter_by(
-                ucampus_id=catalogo.departamento.id
-            ).first()
-            if not department:
-                department = Department(
-                    ucampus_id=catalogo.departamento.id,
-                    name=catalogo.departamento.nombre,
-                    code=catalogo.departamento.codigo,
-                    color=catalogo.departamento.color,
-                )
-                db.session.add(department)
-                db.session.commit()
-
-            for ramo in catalogo.ramos:
-                course = Course.query.filter_by(code=ramo.codigo).first()
-                if course:
-                    continue
-
-                course = Course(
-                    name=ramo.nombre,
-                    code=ramo.codigo,
-                    sct=ramo.sct,
-                    department=department.id,
-                    requisitos=ramo.requisitos,
-                )
-                db.session.add(course)
-
-                db.session.commit()
-
-        print(catalogo)
+        with app.app_context():
+            populate(db)
 
     return app

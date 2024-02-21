@@ -2,6 +2,14 @@
 
 Opiniones!!
 
+
+## Migrations
+
+```
+flask --app fcfmramos db migrate -m "Message"
+flask --app fcfmramos db upgrade
+```
+
 Scoring:
 
 - Verify email: 5p (base)
