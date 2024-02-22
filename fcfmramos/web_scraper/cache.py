@@ -4,7 +4,7 @@ import os
 from typing import Set
 from hashlib import md5
 
-from config import CACHE_DIR
+from fcfmramos.web_scraper.config import CACHE_DIR
 
 
 class HashCache:

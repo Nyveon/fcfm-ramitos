@@ -44,7 +44,7 @@ def create_app():
     app.register_blueprint(auth.bp)
 
     @app.cli.command()
-    def runscraper():
+    def scraper():
         from fcfmramos.populate import populate
 
         with app.app_context():

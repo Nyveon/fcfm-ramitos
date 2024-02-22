@@ -5,7 +5,7 @@ from functools import wraps
 from flask import session, redirect, flash, url_for, render_template
 from flask import Blueprint
 
-import pyrebase
+import pyrebase  # type: ignore
 
 from fcfmramos.model import db
 from fcfmramos.model.user import User

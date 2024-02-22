@@ -1,60 +1,76 @@
 # FCFM Ramos
 
-Opiniones!!
+Plataforma de opiniones e información sobre los ramos FCFM, para ayudar al momento de toma de ramos de malla y electivos. Inspirado en <https://github.com/cadcc/ramosCC>.
 
+[Development trello board](https://trello.com/b/PSyFevmn/ramos-fcfm)
 
-## Migrations
+Stack:
 
+- Python
+  - Linter: Ruff
+- Flask
+  - FlaskWTF
+  - SQLAlchemy
+  - SQLite
+- Firebase (for authentication only)
+- AlpineJS
+
+## Installation
+
+```bash
+pip install -r requirements.txt
 ```
+
+## Database
+
+First run:
+
+```bash
+flask --app fcfmramos db init
+```
+
+Changes to model:
+
+```bash
 flask --app fcfmramos db migrate -m "Message"
 flask --app fcfmramos db upgrade
 ```
 
-Scoring:
+Populate with scraper data:
 
-- Verify email: 5p (base)
-- Like/dislike a course: 2p
-- Like/dislike a text review: 1p
-- Rate carga: 5p
-  - First to rate this course: +5p
-- Rate utilidad: 5p
-  - First to rate this course: +5p
-- Rate dificultad: 5p
-  - First to rate this course: +5p
-- Write a summary: 15p
-  - First to summarize this course: +10p
-- Write a review: 15p
-  - First to review this course: +10p
+```bash
+flas --app fcfmramos scraper
+```
+
+## Running locally
+
+```bash
+flask --app fcfmramos run --debug
+```
+
+## Temporary stuff for later
+
+### Scoring
+
+Achievements (awarded once):
+
+- Verify email: 5p
+- Like/dislike a course: 5p
+- Like/dislike a text review: 5p
+- Rate carga, utilidad and dificultad: 15p
+- Write a summary: 20p
+- Write a review: 20p
+
+Renewable:
+
+- Log in (daily): 1p
 - Summary receives a like: 1p
 - Review receives a like: 1p
 
+### Emoji-scales
 
 Dificultad:
 
-Dificultad:
-1. 🎁 Regalado
-2. 😎 Manejable
-3. 😬 Desafiante
-4. 🤯 Duro
-5. 💀 Intenso
-
-Carga:
-1. 😴 Muy ligera
-2. 🥱 Ligera
-3. 😅 Moderada
-4. 😰 Pesada
-5. 🥵 Muy pesada
-
-Utilidad:
-1. 🙃 Inútil
-2. 🙂 Básica
-3. 😊 Valiosa
-4. 😃 Esencial
-5. 🤩 Vital
-
-
-
-Dificultad:
 1. 🥱 Trivial
 2. 😎 Manejable
 3. 😬 Desafiante
@@ -62,6 +78,7 @@ Dificultad:
 5. 💀 Letal
 
 Carga:
+
 1. 🎁 Regalado
 2. 😴 Ligero
 3. 😅 Moderado
@@ -69,15 +86,21 @@ Carga:
 5. 🥵 Brutal
 
 Utilidad:
+
 1. 🙃 Inútil
 2. 🙂 Básico
 3. 🤓 Valioso
 4. 🧠 Esencial
-5. 😭 Vital
+5. 🤩 Vital
 
-Like/dislike ratio:
+Like/dislike ratio (calculated, not voted on):
+
 1. 💖 Favorito
 2. ❤ Amado
 3. 🤔 Controversial
 4. 😡 Odiado
-5. 😈 Demonio
+5. 👿 Detestado
+
+## License
+
+To be defined once the MVP is ready, for now consider it free to re-use and modify for educational purposes. No commercial use. Contribution is welcome, but in these early stages it would be best if you contact me first <contact@eri.cl>.
