@@ -1,6 +1,7 @@
 import asyncio
+from pathlib import Path
 
-from fcfmramos.web_scraper.client import Client
+from fcfmramos.web_scraper.client import Client, load_cookies
 
 # from cache import HashCache
 from fcfmramos.web_scraper.scraper import scrape_catalogo
@@ -8,22 +9,22 @@ from fcfmramos.web_scraper.ucampus import Departamento
 
 
 SEMESTERS = [
-    20232,
+    # 20232,
     20231,
-    20222,
-    20221,
-    20212,
-    20211,
-    20202,
-    20201,
-    20192,
-    20191,
-    20182,
-    20181,
-    20172,
-    20171,
-    20162,
-    20161,
+    # 20222,
+    # 20221,
+    # 20212,
+    # 20211,
+    # 20202,
+    # 20201,
+    # 20192,
+    # 20191,
+    # 20182,
+    # 20181,
+    # 20172,
+    # 20171,
+    # 20162,
+    # 20161,
 ]
 DEPARTMENTS = [
     Departamento(
@@ -33,7 +34,12 @@ DEPARTMENTS = [
 
 
 async def main():
-    client = Client()
+    ucampus_client = Client()
+
+    # get this file's directory
+    current_dir = Path(__file__).parent
+    cookie_dir = current_dir / "cookie"
+    ucursos_client = Client(load_cookies(cookie_dir))
     # TODO: all of this
     # tasks = []
 
@@ -47,7 +53,9 @@ async def main():
     for semester in SEMESTERS:
         for department in DEPARTMENTS:
             catalogos.append(
-                await scrape_catalogo(client, semester, department)
+                await scrape_catalogo(
+                    ucampus_client, ucursos_client, semester, department
+                )
             )
 
     return catalogos

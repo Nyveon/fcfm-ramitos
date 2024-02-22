@@ -1,6 +1,10 @@
 from dataclasses import dataclass
 
-from fcfmramos.web_scraper.config import FCFM_CATALOGO_URL, FCFM_SALAS_URL
+from fcfmramos.web_scraper.config import (
+    FCFM_CATALOGO_URL,
+    FCFM_SALAS_URL,
+    FCFM_CURSOS_URL,
+)
 
 # TODO: implement
 # @dataclass
@@ -63,3 +67,13 @@ def get_sala_url(sala: int) -> str:
 
 def get_catalogo_url(semester: int, department: int) -> str:
     return f"{FCFM_CATALOGO_URL}?semestre={semester}&depto={department}"
+
+
+def get_institucion_cursos_url(semester: int, department: int) -> str:
+    year = str(semester)[:4]
+    semester = str(semester)[4]
+
+    return (
+        f"{FCFM_CURSOS_URL}/?_hook=periodo&periodo={year}.{semester}"
+        f"&departamento={department}"
+    )

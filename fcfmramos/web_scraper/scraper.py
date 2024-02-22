@@ -1,8 +1,10 @@
+from typing import Dict
 from bs4 import BeautifulSoup, element
 
 from fcfmramos.web_scraper.client import Client
 from fcfmramos.web_scraper.ucampus import (
     get_catalogo_url,
+    get_institucion_cursos_url,
     Catalogo,
     Ramo,
     Curso,
@@ -19,7 +21,7 @@ async def scrape(client: Client, url: str) -> BeautifulSoup:
 
 
 def extract_programa_id(url: str) -> int | None:
-    return None if not url else int(url[url.find("id=") + 3:])
+    return None if not url else int(url[url.find("id=") + 3 :])
 
 
 def text_from_dt_dd(dl: element.Tag, title: str) -> str | None:
@@ -100,15 +102,18 @@ def get_curso_comentario(element: element.Tag) -> str | None:
     return h2.get_text(strip=True) if h2 else None
 
 
-def get_curso_profesores(element: element.Tag) -> list[Profesor]:
+def get_curso_profesores(
+    element: element.Tag, profes: Dict[str, str]
+) -> list[Profesor]:
     profesores: list[Profesor] = []
     profe_list = element.find("ul", class_="profes").find_all("li")
 
     for profe in profe_list:
-        img = profe.find("img")
-        src = img["src"]
-        profe_id = src.split("/")[-3]
+        # img = profe.find("img")
+        # src = img["src"]
+        # profe_id = src.split("/")[-3]
         nombre = profe.find("h1").get_text(strip=True)
+        profe_id = profes[nombre]
 
         profesores.append(Profesor(profe_id, nombre))
 
@@ -130,13 +135,37 @@ def get_curso_horarios(element: element.Tag) -> str | None:
 
 
 async def scrape_catalogo(
-    client: Client, semester: int, department: Departamento
+    ucampus_client: Client,
+    ucursos_client: Client,
+    semester: int,
+    department: Departamento,
 ) -> Catalogo:
     ramos: list[Ramo] = []
 
-    soup = await scrape(client, get_catalogo_url(semester, department.id))
-    catalogo = soup.find(id="body")
+    curso_soup = await scrape(
+        ucursos_client, get_institucion_cursos_url(semester, department.id)
+    )
+    i_cursos = curso_soup.find(id="body")
+    profe_lists = i_cursos.find_all("ul", class_="profes")
 
+    profes = {}
+
+    for profe_list in profe_lists:
+        profe_elements = profe_list.find_all("h1")
+        for profe_element in profe_elements:
+            anchor = profe_element.find("a", class_="usuario")
+
+            if not anchor:
+                raise ValueError("No anchor - check cookie")
+
+            name = anchor.get_text(strip=True)
+            id = anchor["href"].split("/")[-2]
+            profes[name] = id
+
+    catalogo_soup = await scrape(
+        ucampus_client, get_catalogo_url(semester, department.id)
+    )
+    catalogo = catalogo_soup.find(id="body")
     ramo_divs = catalogo.find_all("div", class_="ramo")
 
     for ramo_div in ramo_divs:
@@ -157,7 +186,7 @@ async def scrape_catalogo(
                     get_curso_programa(curso_tds[0], programa),
                     get_curso_modalidad(curso_tds[0]),
                     get_curso_comentario(curso_tds[0]),
-                    get_curso_profesores(curso_tds[0]),
+                    get_curso_profesores(curso_tds[0], profes),
                     get_curso_horarios(curso_tds[3]),
                 )
             )
