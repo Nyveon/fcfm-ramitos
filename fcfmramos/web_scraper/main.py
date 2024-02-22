@@ -9,22 +9,22 @@ from fcfmramos.web_scraper.ucampus import Departamento
 
 
 SEMESTERS = [
-    # 20232,
+    20232,
     20231,
-    # 20222,
-    # 20221,
-    # 20212,
-    # 20211,
-    # 20202,
-    # 20201,
-    # 20192,
-    # 20191,
-    # 20182,
-    # 20181,
-    # 20172,
-    # 20171,
-    # 20162,
-    # 20161,
+    20222,
+    20221,
+    20212,
+    20211,
+    20202,
+    20201,
+    20192,
+    20191,
+    20182,
+    20181,
+    20172,
+    20171,
+    20162,
+    20161,
 ]
 DEPARTMENTS = [
     Departamento(
@@ -52,6 +52,7 @@ async def main():
 
     for semester in SEMESTERS:
         for department in DEPARTMENTS:
+            print(f"Scraping {semester} {department.nombre}")
             catalogos.append(
                 await scrape_catalogo(
                     ucampus_client, ucursos_client, semester, department

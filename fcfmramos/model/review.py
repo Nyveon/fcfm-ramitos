@@ -1,5 +1,8 @@
 from fcfmramos.model import db
 
+    # registration_date: Mapped[datetime] = mapped_column(
+    #     default=datetime.utcnow
+    # )
 
 # class Review(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)

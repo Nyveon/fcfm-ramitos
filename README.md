@@ -17,6 +17,15 @@ Stack:
 
 ## Installation
 
+Set up the following files:
+
+- `fcfmramos/web_scraper/config.py` (WIP)
+- `fcfmramos/config.py` with the line `secret_key=_` (the secret key for flask)
+- `fbconfig.json` with the firebase API info
+- `fcfm-ramos-key.json` with the firebase auth info
+
+Then:
+
 ```bash
 pip install -r requirements.txt
 ```

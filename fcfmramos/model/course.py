@@ -3,6 +3,7 @@ from typing import Optional, List
 
 from sqlalchemy import String, ForeignKey, Column, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.sql.schema import UniqueConstraint
 
 from fcfmramos.model import db
 
@@ -36,12 +37,20 @@ class Curso(db.Model):
     año: Mapped[int] = mapped_column()
     semestre: Mapped[int] = mapped_column()
     seccion: Mapped[int] = mapped_column()
+    cupos: Mapped[int] = mapped_column()
+    cupos_ocupados: Mapped[int] = mapped_column()
 
     ramo_id: Mapped[int] = mapped_column(ForeignKey("ramo.id"))
     ramo: Mapped["Ramo"] = relationship(back_populates="cursos")
 
     profesores: Mapped[List["Profesor"]] = relationship(
         secondary="curso_profesor", back_populates="cursos"
+    )
+
+    __table_args__ = (
+        UniqueConstraint(
+            "año", "semestre", "seccion", "ramo_id", name="sección"
+        ),
     )
 
 

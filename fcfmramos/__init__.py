@@ -17,8 +17,9 @@ def create_app():
 
     from fcfmramos.model import db
     from flask_migrate import Migrate
+
     db.init_app(app)
-    migrate = Migrate(app, db)
+    Migrate(app, db)
 
     @app.cli.command()
     def createdb():
