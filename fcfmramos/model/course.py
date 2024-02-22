@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 from typing import Optional, List
 
 from sqlalchemy import String, ForeignKey, Column, Table
@@ -16,8 +15,9 @@ class Departamento(db.Model):
     ucampus_id: Mapped[int] = mapped_column(unique=True)
     color: Mapped[Optional[str]] = mapped_column(String(6))
 
+    ramos: Mapped[List["Ramo"]] = relationship("Ramo")
 
-@dataclass
+
 class Ramo(db.Model):
     __tablename__ = "ramo"
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -29,6 +29,18 @@ class Ramo(db.Model):
     requisitos: Mapped[str] = mapped_column(String(256))
 
     cursos: Mapped[List["Curso"]] = relationship(back_populates="ramo")
+    departamento: Mapped["Departamento"] = relationship("Departamento")
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "codigo": self.codigo,
+            "nombre": self.nombre,
+            "departamento": self.departamento.nombre,
+            "sct": self.sct,
+            "sustentabilidad": self.sustentabilidad,
+            "requisitos": self.requisitos,
+        }
 
 
 class Curso(db.Model):
