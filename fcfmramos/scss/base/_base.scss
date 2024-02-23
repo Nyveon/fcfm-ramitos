@@ -2,7 +2,6 @@
 @use "../abstracts/mixins" as m;
 
 
-
 body {
     @include m.flex-container(column, flex-start, center);
 
@@ -43,7 +42,7 @@ a {
 
     position: relative;
     text-decoration: none;
-    color: c.$accent;
+    color: c.$link;
 
     &:hover::before {
         transform: scaleX(1);
@@ -56,7 +55,7 @@ a {
         height: 2px;
         bottom: 0;
         left: 0;
-        background-color: c.$accent;
+        background-color: c.$link;
         transform: scaleX(0);
         transform-origin: center;
         transition: transform 0.2s ease;

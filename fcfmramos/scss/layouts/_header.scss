@@ -9,7 +9,8 @@ nav {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
-    background: c.$background-primary;
+    color: c.$header-text;
+    background-color: c.$header;
 
     position: fixed;
     top: 0;
@@ -24,7 +25,7 @@ nav {
     }
 
     a {
-        color: c.$text;
+        color: c.$header-text;
     }
 }
 

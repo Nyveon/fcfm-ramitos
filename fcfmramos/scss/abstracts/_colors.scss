@@ -1,9 +1,35 @@
-$text: #fbfefe;
-$text-secondary: #b3b3b3;
-$text-light: rgb(110, 118, 126);
-$background: #021112;
-$background-primary: #0d1b1e;
-$background-highlight: #1f2f2f;
-$primary: #26cee8;
-$secondary: #bc8af4;
-$accent: #ec4be1;
+$text: #090908;
+$text-secondary: #797d69;
+
+$background: #eee9db;
+$background-mid: #e0d7c5;
+$background-dark: #d3c9b0;
+$background-very-dark: #998973;
+
+$primary-light: #6cb2d1;
+$primary: #32a0c8;
+$primary-mid: #1d61a9;
+$primary-dark: #201288;
+
+$accent: #df61ff;
+
+// Specifics:
+$link: $primary;
+$card: $background-mid;
+
+$card-highlight: $primary-light;
+$card-pill: $primary-mid;
+
+$button: $primary-mid;
+$button-highlight: $primary;
+$button-text: $background;
+
+$input-border: $background-very-dark;
+$input-highlight: $primary;
+$placeholder-text: $text-secondary;
+
+$header: $primary-dark;
+$header-text: $background;
+$header-border: $primary-dark;
+
+$form: $background-mid;

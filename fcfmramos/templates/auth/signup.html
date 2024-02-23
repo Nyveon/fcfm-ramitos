@@ -9,6 +9,7 @@
 
         <div>
             {{ form.email.label }}
+            <p class="sublabel">(terminando en ug.uchile.cl o ing.uchile.cl)</p>
             {{ form.email(size=32) }}
             {% for error in form.email.errors %}
                 <span style="color: red;">{{ error }}</span>
@@ -16,6 +17,7 @@
         </div>
         <div>
             {{ form.password.label }}
+            <p class="sublabel">(mínimo 8 carácteres)</p>
             {{ form.password(size=32) }}
             {% for error in form.password.errors %}
                 <span style="color: red;">{{ error }}</span>

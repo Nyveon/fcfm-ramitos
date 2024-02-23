@@ -1,4 +1,5 @@
 @use "../abstracts/colors" as c;
+@use "../abstracts/mixins" as m;
 
 input {
 	color: c.$text;
@@ -8,47 +9,49 @@ input {
 	margin-right: 6px;
 	margin-bottom: 6px;
 	padding: 10px;
-	border: none;
 	border-radius: 6px;
 	outline: none;
-	border: 1px solid rgb(33, 38, 45);
+	border: 1px solid c.$input-border;
 
 	&:focus {
-		border: 1px solid c.$accent;
-		box-shadow: 0 0 3px c.$accent;
+		border: 1px solid c.$input-highlight;
+		box-shadow: 0 0 3px c.$input-border;
 	}
 
 	&::placeholder {
-		color: c.$text-light;
+		color: c.$placeholder-text;
 	}
 
 	&:hover {
-		box-shadow: 0 0 3px c.$accent;
-		filter: brightness(115%);
+		box-shadow: 0 0 3px c.$input-highlight;
 	}
 }
 
 label {
+    font-weight: bold;
 	vertical-align: middle;
-	margin-bottom: 4px;
 	display: inline-block;
 }
 
 input[type="submit"] {
-	background: c.$background-primary;
-	border: 1px solid rgb(48, 54, 61);
-	color: c.$text;
-	margin-right: 0.5rem;
-	margin-bottom: 0.5rem;
-	padding: 5px 16px;
-	border-radius: 6px;
-	outline: none;
-}
+    @include m.shadow1;
 
-input[type="submit"]:hover,
-input[type="reset"]:hover,
-input[type="button"]:hover,
-button:hover {
-	box-shadow: 0 0 3px c.$accent;
-}
+    cursor: pointer;
 
+    color: c.$button-text;
+    background-color: c.$button;
+    border: none;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding: 5px 16px;
+    border-radius: 6px;
+    width: 8rem;
+    font-weight: bold;
+    outline: none;
+
+    transition: all 0.2s ease;
+
+    &:hover {
+        background-color: c.$button-highlight;
+    }
+}

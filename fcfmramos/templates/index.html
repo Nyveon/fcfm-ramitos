@@ -20,12 +20,12 @@
             <template x-for="course in filteredCourses" :key="course.id">
                 <div class="course-card">
                     <div class="course-top-bar">
-                        <span class="course-code" x-text="course.codigo"></span>
-                        <span class="course-stars">★★★★★</span>
+                        <span class="course-code pill" x-text="course.codigo"></span>
+                        {# <span class="course-reviews"><span class="like">0👍</span><span class="dislike">0👎</span></span> #}
                     </div>
                     <span class="course-name" x-text="course.nombre"></span>
 
-                    <div class="course-info">
+                    {# <div class="course-info">
                         <div class="left">
                             <div><span>Dificultad;</span><span>🔥 Dificil</span></div>
                             <div><span>Carga:</span><span>😰 Pesado</span></div>
@@ -36,7 +36,7 @@
                             <div><span>6 Créditos</span></div>
                             <div><span>Dictado: 2022</span></di>
                         </div>
-                    </div>
+                    </div> #}
                 </div>
             </template>
         </div>

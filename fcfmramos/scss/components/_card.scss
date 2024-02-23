@@ -1,99 +1,108 @@
-@use '../abstracts/colors' as c;
-@use '../abstracts/mixins' as m;
-
+@use "../abstracts/colors" as c;
+@use "../abstracts/mixins" as m;
 
 #courses {
-    @include m.flex-container(row, center, center);
-    position: relative;
-    flex-wrap: wrap;
-    gap: 1rem;
-    width: 100%;
+	@include m.flex-container(row, center, center);
+	position: relative;
+	flex-wrap: wrap;
+	gap: 1rem;
+	width: 100%;
 }
 
 $padding: 4px;
 $border-radius: 0.5rem;
 
 .course-card {
-    @include m.flex-container(column, flex-start, center);
-    text-align: center;
-    position: relative;
-    overflow: visible;
+	@include m.flex-container(column, flex-start, center);
+    @include m.shadow1;
 
-    cursor: pointer;
+	text-align: center;
+	position: relative;
+	overflow: visible;
 
-    background-color: c.$background-primary;
+	cursor: pointer;
 
-    width: 100%;
-    max-width: 20rem;
+	background-color: c.$card;
 
-    border-radius: 0.5rem;
+	width: 100%;
+	max-width: 20rem;
 
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	border-radius: 0.5rem;
+	gap: 1rem;
 
-    gap: 0.5rem;
+	// $card-height: 10rem;
+    $card-height: 6rem;
+	height: $card-height;
+	transition: all 0.3s ease;
 
-    $card-height: 5rem;
-    height: $card-height;
-    transition: all 0.3s ease;
+	.course-top-bar {
+		@include m.flex-container(row, space-between, center);
+		width: 100%;
+		padding: $padding;
+		gap: 0.5rem;
 
-    .course-top-bar {
-        @include m.flex-container(row, space-between, center);
-        width: 100%;
-        padding: $padding;
-        gap: 0.5rem;
+		border-radius: 0.5rem 0.5rem 0 0;
 
-        border-radius: 0.5rem 0.5rem 0 0;
 
-        .course-code {
-            text-align: left;
-            padding-left: 0.5rem;
-        }
+		> .course-code {
+			text-align: left;
+			margin-left: 0.5rem;
+            color: c.$background;
+			background-color: c.$card-pill;
+		}
 
-        .course-stars {
-            text-align: right;
-            padding-right: 0.5rem;
-            color: c.$accent;
-        }
-    }
+		> .course-reviews {
+			text-align: right;
+			margin-right: 0.5rem;
+            transition: all 0.3s ease;
+		}
+	}
 
-    .course-name {
-        padding-inline: $padding;
-    }
+	.course-name {
+        font-weight: 600;
+		padding-inline: $padding;
+        height: 100%;
+	}
 
     .course-info {
-        @include m.flex-container(row, space-between, flex-start);
-        position: absolute;
-        overflow: hidden;
-        text-align: left;
-
-        top: calc(100% - $border-radius);
-        // bottom: 0;
-        left: 0;
-
+        @include m.flex-container(row, space-between, flex-end);
         width: 100%;
-        height: 0;
+        padding: $padding;
+        height: 100%;
 
-        background-color: c.$background-primary;
-        border-radius: 0 0 0.5rem 0.5rem;
-
-        transition: all 0.3s ease;
-
-        z-index: 2;
-
-        >div {
-            @include m.flex-container(column, flex-start, flex-start);
-            padding: $padding;
-        }
+        > div {
+			@include m.flex-container(column, flex-start, flex-start);
+			padding: $padding;
+		}
     }
 
-    &:hover {
-        border-radius: 0.5rem 0.5rem 0 0;
-        background-color: c.$background-highlight;
+	// .course-info {
+	// 	@include m.flex-container(row, space-between, flex-start);
+	// 	position: absolute;
+	// 	overflow: hidden;
+	// 	text-align: left;
 
+	// 	top: calc(100% - $border-radius);
+	// 	// bottom: 0;
+	// 	left: 0;
 
-        .course-info {
-            height: $card-height * 0.75;
-            background-color: c.$background-highlight;
-        }
-    }
+	// 	width: 100%;
+	// 	height: 0;
+
+	// 	background-color: c.$card;
+	// 	border-radius: 0 0 0.5rem 0.5rem;
+
+	// 	transition: all 0.3s ease;
+
+	// 	z-index: 2;
+
+	// 	> div {
+	// 		@include m.flex-container(column, flex-start, flex-start);
+	// 		padding: $padding;
+	// 	}
+	// }
+
+	&:hover {
+		background-color: c.$card-highlight;
+	}
 }

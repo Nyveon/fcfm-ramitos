@@ -15,7 +15,7 @@ class Departamento(db.Model):
     ucampus_id: Mapped[int] = mapped_column(unique=True)
     color: Mapped[Optional[str]] = mapped_column(String(6))
 
-    ramos: Mapped[List["Ramo"]] = relationship("Ramo")
+    ramos: Mapped[List["Ramo"]] = relationship(back_populates="departamento")
 
 
 class Ramo(db.Model):
@@ -29,7 +29,7 @@ class Ramo(db.Model):
     requisitos: Mapped[str] = mapped_column(String(256))
 
     cursos: Mapped[List["Curso"]] = relationship(back_populates="ramo")
-    departamento: Mapped["Departamento"] = relationship("Departamento")
+    departamento: Mapped["Departamento"] = relationship(back_populates="ramos")
 
     def serialize(self):
         return {

@@ -3,6 +3,7 @@ from wtforms import StringField, PasswordField, SubmitField, ValidationError
 from wtforms.validators import DataRequired, Email, Length
 
 
+EMAIL = "Correo institucional"
 INVALID_EMAIL = "Correo inválido"
 PLACEHOLDER_EMAIL = {"placeholder": "nombre.apellido@ug.uchile.cl"}
 
@@ -14,7 +15,7 @@ def validate_email_domain(form, field):
 
 class LoginForm(FlaskForm):
     email = StringField(
-        "Correo",
+        EMAIL,
         render_kw=PLACEHOLDER_EMAIL,
         validators=[DataRequired(), Email(INVALID_EMAIL)],
     )
@@ -26,7 +27,7 @@ class LoginForm(FlaskForm):
 
 class SignupForm(FlaskForm):
     email = StringField(
-        "Correo",
+        EMAIL,
         render_kw=PLACEHOLDER_EMAIL,
         validators=[
             DataRequired(),
@@ -42,7 +43,7 @@ class SignupForm(FlaskForm):
 
 class RecoverPasswordForm(FlaskForm):
     email = StringField(
-        "Correo (@ug.uchile.cl)",
+        EMAIL,
         render_kw=PLACEHOLDER_EMAIL,
         validators=[
             DataRequired(),
@@ -50,4 +51,4 @@ class RecoverPasswordForm(FlaskForm):
             validate_email_domain,
         ],
     )
-    submit = SubmitField("Recuperar contraseña")
+    submit = SubmitField("Enviar")
