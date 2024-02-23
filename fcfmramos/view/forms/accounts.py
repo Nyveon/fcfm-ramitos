@@ -1,7 +1,13 @@
 import re
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, ValidationError, SelectField
+from wtforms import (
+    StringField,
+    PasswordField,
+    SubmitField,
+    ValidationError,
+    SelectField,
+)
 from wtforms.validators import DataRequired, Email, Length
 
 
@@ -11,8 +17,11 @@ PLACEHOLDER_EMAIL = {"placeholder": "nombre.apellido@ug.uchile.cl"}
 
 
 def validate_email_domain(form, field):
-    if not field.data.endswith("@ug.uchile.cl"):
-        raise ValidationError("El correo debe terminar en @ug.uchile.cl")
+    pattern = r"@[\w.]*uchile\.cl$"
+    if not re.search(pattern, field.data):
+        raise ValidationError(
+            "El correo debe terminar en @*.uchile.cl o @uchile.cl"
+        )
 
 
 class LoginForm(FlaskForm):
