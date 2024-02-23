@@ -5,7 +5,7 @@
 	@include m.flex-container(row, center, center);
 	position: relative;
 	flex-wrap: wrap;
-	gap: 1rem;
+	gap: 1.5rem;
 	width: 100%;
 }
 
@@ -14,7 +14,7 @@ $border-radius: 0.5rem;
 
 .course-card {
 	@include m.flex-container(column, flex-start, center);
-    @include m.shadow1;
+	@include m.shadow1;
 
 	text-align: center;
 	position: relative;
@@ -31,50 +31,69 @@ $border-radius: 0.5rem;
 	gap: 1rem;
 
 	// $card-height: 10rem;
-    $card-height: 6rem;
+	$card-height: 7rem;
 	height: $card-height;
 	transition: all 0.3s ease;
 
-	.course-top-bar {
+	.course-bar {
 		@include m.flex-container(row, space-between, center);
+		position: absolute;
 		width: 100%;
-		padding: $padding;
 		gap: 0.5rem;
 
+		font-size: 0.9rem;
+		color: c.$course-code;
+
 		border-radius: 0.5rem 0.5rem 0 0;
+		padding: 0.5rem;
 
-
-		> .course-code {
-			text-align: left;
-			margin-left: 0.5rem;
-            color: c.$background;
-			background-color: c.$card-pill;
+		&.top {
+			top: 0;
+			left: 0;
 		}
 
-		> .course-reviews {
+		&.bottom {
+			bottom: 0;
+			left: 0;
+		}
+
+		.review-stats {
+			@include m.flex-container(row, center, center);
+			gap: 0.75rem;
+		}
+
+        .group {
+            @include m.flex-container(row, center, flex-end);
+            gap: 0.25rem;
+        }
+
+		> .left {
+			text-align: left;
+		}
+
+		> .right {
 			text-align: right;
-			margin-right: 0.5rem;
-            transition: all 0.3s ease;
 		}
 	}
 
 	.course-name {
-        font-weight: 600;
-		padding-inline: $padding;
-        height: 100%;
+		@include m.flex-container(column, center, center);
+		font-weight: 600;
+		padding-inline: 0.5rem;
+		height: 100%;
 	}
 
-    .course-info {
-        @include m.flex-container(row, space-between, flex-end);
-        width: 100%;
-        padding: $padding;
-        height: 100%;
+	.course-info {
+		@include m.flex-container(row, space-between, flex-end);
+		width: 100%;
+		padding: $padding;
+		height: 100%;
 
-        > div {
+		> div {
 			@include m.flex-container(column, flex-start, flex-start);
 			padding: $padding;
 		}
-    }
+	}
 
 	// .course-info {
 	// 	@include m.flex-container(row, space-between, flex-start);
@@ -104,5 +123,9 @@ $border-radius: 0.5rem;
 
 	&:hover {
 		background-color: c.$card-highlight;
+
+		.course-bar {
+			color: inherit;
+		}
 	}
 }

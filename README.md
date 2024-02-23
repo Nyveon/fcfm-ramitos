@@ -15,6 +15,10 @@ Stack:
 - Firebase (for authentication only)
 - AlpineJS
 
+Resources:
+
+- Icons: <https://feathericons.com/>
+
 ## Installation
 
 Set up the following files:

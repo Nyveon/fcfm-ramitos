@@ -3,7 +3,7 @@ from flask import render_template, redirect, url_for
 
 from fcfmramos.view.auth import is_logged_in
 from fcfmramos.model import db
-from fcfmramos.model.course import Ramo
+from fcfmramos.model.ucampus import Ramo
 
 bp = Blueprint("main", __name__)
 

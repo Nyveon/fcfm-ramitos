@@ -1,39 +1,46 @@
-$text: #090908;
-$text-secondary: #797d69;
+$text: #ebebeb;
+$text-secondary: #8898a5;
 
-$background: #eee9db;
-$background-mid: #e0d7c5;
-$background-dark: #d3c9b0;
-$background-very-dark: #998973;
+$background: hsl(250, 12%, 12%);
+$background-mid: hsl(250, 12%, 18%);
 
-$primary-light: #6cb2d1;
-$primary: #32a0c8;
-$primary-mid: #1d61a9;
-$primary-dark: #201288;
+// $background: #222;
+// $background-mid: #333;
 
-$accent: #df61ff;
+$primary: hsl(200, 60%, 50%);
+$primary-dark: hsl(200, 40%, 30%);
+$accent: hsl(200, 100%, 60%);
+
 
 // Specifics:
-$link: $primary;
+$link: $accent;
 $card: $background-mid;
 
-$card-highlight: $primary-light;
-$card-pill: $primary-mid;
+$card-highlight: $primary-dark;
+$card-pill: $primary;
+$course-code: $text-secondary;
 
-$button: $primary-mid;
-$button-highlight: $primary;
+$button: $primary;
+$button-highlight: $accent;
 $button-text: $background;
 
-$input-border: $background-very-dark;
-$input-highlight: $primary;
+$input-border: $text-secondary;
+$input-highlight: $accent;
 $placeholder-text: $text-secondary;
 
-$header: $primary-dark;
-$header-text: $background;
-$header-border: $primary-dark;
+$header-text: $text;
 
 $form: $background-mid;
+$sublabel: $text-secondary;
 
 $select-background: $background;
-$select-border: $background-very-dark;
+$select-border: $background;
 $select-text: $text;
+
+$electivo-e: hsl(120, 12%, 22%);
+$electivo-l: hsl(190, 12%, 22%);
+$malla: hsl(250, 18%, 22%);
+
+// $electivo-e: hsl(120, 12%, 28%);
+// $electivo-l: hsl(190, 12%, 28%);
+// $malla: hsl(250, 18%, 28%);

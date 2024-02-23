@@ -1,22 +1,20 @@
 @use "../abstracts/mixins" as m;
 @use "../abstracts/colors" as c;
 
+
 nav {
     @include m.flex-container(row, space-between, center);
-    height: 3.5rem;
+    height: 4rem;
     padding: 0.5rem 12%;
-
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-
-    color: c.$header-text;
-    background-color: c.$header;
 
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 1000;
+
+    background-color: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(12px);
 
     >div {
         @include m.flex-container(row, flex-end, center);

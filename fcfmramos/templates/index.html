@@ -1,3 +1,5 @@
+{% from "_macros.html" import icon %}
+
 {% extends "_base.html" %}
 
 {% block title %}Home{% endblock %}
@@ -9,6 +11,7 @@
     <section x-data="loadCourses()">
 
         <input
+            id="search"
             x-ref="searchField"
             x-model="search"
             x-on:keydown.window.prevent.slash="$refs.searchField.focus()"
@@ -19,24 +22,22 @@
         <div id="courses">
             <template x-for="course in filteredCourses" :key="course.id">
                 <div class="course-card">
-                    <div class="course-top-bar">
-                        <span class="course-code pill" x-text="course.codigo"></span>
-                        {# <span class="course-reviews"><span class="like">0👍</span><span class="dislike">0👎</span></span> #}
+                    <div class="course-bar top" x-data="{tipo: ['Licenciatura', 'Especialidad', 'Obligatorio'][Math.floor(Math.random() * 3)]}">
+                        <span class="left" x-text="course.codigo"></span>
+                        <div class="right">
+                            <div class="pill" x-text="tipo" :class="tipo">Electivo</div>
+                        </div>
                     </div>
                     <span class="course-name" x-text="course.nombre"></span>
-
-                    {# <div class="course-info">
-                        <div class="left">
-                            <div><span>Dificultad;</span><span>🔥 Dificil</span></div>
-                            <div><span>Carga:</span><span>😰 Pesado</span></div>
-                            <div><span>Utilidad:</span><span>🤩 Útil</span></div>
+                    <div class="course-bar bottom">
+                        <div class="left review-stats">
+                            <div class="group">{{ icon('message-square') }}<span>4</span></div>
+                            <div class="group">{{ icon('thumbs-up') }}<span>78%</span></div>
                         </div>
                         <div class="right">
-                            <div><span>103 Reseñas</span></div>
-                            <div><span>6 Créditos</span></div>
-                            <div><span>Dictado: 2022</span></di>
+                            <div class="group">{{ icon('calendar') }}<span>2023-1</span></div>
                         </div>
-                    </div> #}
+                    </div>
                 </div>
             </template>
         </div>
@@ -60,7 +61,7 @@
                         const searchString = normalize(this.search)
 
                         return this.myForData.filter((item) => {
-                            return normalize(item.name).includes(searchString) || normalize(item.code).includes(searchString);
+                            return normalize(item.nombre).includes(searchString) || normalize(item.codigo).includes(searchString);
                         });
                     }
                 }

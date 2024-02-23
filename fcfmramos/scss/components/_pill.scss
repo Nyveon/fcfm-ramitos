@@ -1,7 +1,25 @@
+@use "../abstracts/mixins" as m;
+@use "../abstracts/colors" as c;
+
 $pill-padding: 2px;
 
 .pill {
-    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    @include m.flex-container(row, center, center);
+    color: c.$text;
     padding: $pill-padding;
     border-radius: $pill-padding * 2;
+    border: 1px solid transparent;
+    width: 6rem;
+
+    &.Licenciatura {
+        background-color: c.$electivo-l;
+    }
+
+    &.Especialidad {
+        background-color: c.$electivo-e;
+    }
+
+    &.Obligatorio {
+        background-color: c.$malla;
+    }
 }

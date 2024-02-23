@@ -2,7 +2,7 @@ import asyncio
 from flask_sqlalchemy import SQLAlchemy
 
 from fcfmramos.web_scraper.main import main
-from fcfmramos.model.course import Departamento, Ramo, Curso, Profesor
+from fcfmramos.model.ucampus import Departamento, Ramo, Curso, Profesor
 
 
 def populate(db: SQLAlchemy):

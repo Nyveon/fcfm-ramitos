@@ -9,7 +9,7 @@ import pyrebase  # type: ignore
 
 from fcfmramos.model import db
 from fcfmramos.model.user import User
-from fcfmramos.model.course import Departamento
+from fcfmramos.model.ucampus import Departamento
 from fcfmramos.view.forms.accounts import (
     LoginForm,
     SignupForm,
@@ -75,6 +75,8 @@ def login_email_password(email, password):
     print(local_user)
     if local_user is None:
         print("[ERROR] Ghost user?")
+    else:
+        session.permanent = True
 
 
 @bp.route("/verify_email", methods=["GET"])
@@ -130,6 +132,8 @@ def signup():
             db.session.commit()
             print("Local user made")
 
+            session.permanent = True
+
             try:
                 print("[WARNING] Email verification disabled!")
                 # todo: re-enable this
@@ -145,7 +149,8 @@ def signup():
             flash("Cuenta creada", "success")
             return redirect(url_for("main.index"))
         except Exception as e:
-            print(e)
+            print(f"Error creating user: {e}")
+            session.clear()
             flash("Error en creación de cuenta", "error")
             return redirect(url_for("auth.signup"))
 
@@ -176,7 +181,8 @@ def forgot_password():
 def login():
     form = LoginForm()
     if is_logged_in():
-        return {"message": "Ya estás ingresadx"}, 200
+        flash("Ya estás ingresadx", "info")
+        return redirect(url_for("main.index"))
 
     if form.validate_on_submit():
         email = form.email.data

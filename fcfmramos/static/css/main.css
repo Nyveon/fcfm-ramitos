@@ -68,8 +68,8 @@ body {
   scroll-behavior: smooth;
   word-wrap: break-word;
   text-rendering: optimizeLegibility;
-  color: #090908;
-  background-color: #eee9db;
+  color: #ebebeb;
+  background-color: hsl(250, 12%, 12%);
   margin: 0 12%;
 }
 @media screen and (max-width: 1000px) {
@@ -99,7 +99,7 @@ section {
 a {
   position: relative;
   text-decoration: none;
-  color: #32a0c8;
+  color: hsl(200, 100%, 60%);
 }
 a:hover::before {
   transform: scaleX(1);
@@ -111,7 +111,7 @@ a::before {
   height: 2px;
   bottom: 0;
   left: 0;
-  background-color: #32a0c8;
+  background-color: hsl(200, 100%, 60%);
   transform: scaleX(0);
   transform-origin: center;
   transition: transform 0.2s ease;
@@ -231,7 +231,7 @@ strong {
   justify-content: center;
   position: relative;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 1.5rem;
   width: 100%;
 }
 
@@ -245,38 +245,62 @@ strong {
   position: relative;
   overflow: visible;
   cursor: pointer;
-  background-color: #e0d7c5;
+  background-color: hsl(250, 12%, 18%);
   width: 100%;
   max-width: 20rem;
   border-radius: 0.5rem;
   gap: 1rem;
-  height: 6rem;
+  height: 7rem;
   transition: all 0.3s ease;
 }
-.course-card .course-top-bar {
+.course-card .course-bar {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  position: absolute;
   width: 100%;
-  padding: 4px;
   gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #8898a5;
   border-radius: 0.5rem 0.5rem 0 0;
+  padding: 0.5rem;
 }
-.course-card .course-top-bar > .course-code {
+.course-card .course-bar.top {
+  top: 0;
+  left: 0;
+}
+.course-card .course-bar.bottom {
+  bottom: 0;
+  left: 0;
+}
+.course-card .course-bar .review-stats {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+.course-card .course-bar .group {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 0.25rem;
+}
+.course-card .course-bar > .left {
   text-align: left;
-  margin-left: 0.5rem;
-  color: #eee9db;
-  background-color: #1d61a9;
 }
-.course-card .course-top-bar > .course-reviews {
+.course-card .course-bar > .right {
   text-align: right;
-  margin-right: 0.5rem;
-  transition: all 0.3s ease;
 }
 .course-card .course-name {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   font-weight: 600;
-  padding-inline: 4px;
+  padding-inline: 0.5rem;
   height: 100%;
 }
 .course-card .course-info {
@@ -296,12 +320,15 @@ strong {
   padding: 4px;
 }
 .course-card:hover {
-  background-color: #6cb2d1;
+  background-color: hsl(200, 40%, 30%);
+}
+.course-card:hover .course-bar {
+  color: inherit;
 }
 
 input {
-  color: #090908;
-  background-color: #eee9db;
+  color: #ebebeb;
+  background-color: hsl(250, 12%, 12%);
   font-family: inherit;
   font-size: inherit;
   margin-right: 6px;
@@ -309,20 +336,20 @@ input {
   padding: 10px;
   border-radius: 6px;
   outline: none;
-  border: 1px solid #998973;
+  border: 1px solid #8898a5;
 }
 input:focus {
-  border: 1px solid #32a0c8;
-  box-shadow: 0 0 3px #998973;
+  border: 1px solid hsl(200, 100%, 60%);
+  box-shadow: 0 0 3px #8898a5;
 }
 input::-moz-placeholder {
-  color: #797d69;
+  color: #8898a5;
 }
 input::placeholder {
-  color: #797d69;
+  color: #8898a5;
 }
 input:hover {
-  box-shadow: 0 0 3px #32a0c8;
+  box-shadow: 0 0 3px hsl(200, 100%, 60%);
 }
 
 label {
@@ -334,8 +361,8 @@ label {
 input[type=submit] {
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
   cursor: pointer;
-  color: #eee9db;
-  background-color: #1d61a9;
+  color: hsl(250, 12%, 12%);
+  background-color: hsl(200, 60%, 50%);
   border: none;
   margin-right: 0.5rem;
   margin-bottom: 0.5rem;
@@ -347,12 +374,12 @@ input[type=submit] {
   transition: all 0.2s ease;
 }
 input[type=submit]:hover {
-  background-color: #32a0c8;
+  background-color: hsl(200, 100%, 60%);
 }
 
 select {
-  color: #090908;
-  background-color: #eee9db;
+  color: #ebebeb;
+  background-color: hsl(250, 12%, 12%);
   font-family: inherit;
   font-size: inherit;
   margin-right: 6px;
@@ -361,13 +388,82 @@ select {
   border: none;
   border-radius: 6px;
   outline: none;
-  border: 1px solid #998973;
+  border: 1px solid hsl(250, 12%, 12%);
 }
 
 .pill {
-  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  color: #ebebeb;
   padding: 2px;
   border-radius: 4px;
+  border: 1px solid transparent;
+  width: 6rem;
+}
+.pill.Licenciatura {
+  background-color: hsl(190, 12%, 22%);
+}
+.pill.Especialidad {
+  background-color: hsl(120, 12%, 22%);
+}
+.pill.Obligatorio {
+  background-color: hsl(250, 18%, 22%);
+}
+
+.icon {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.i-thumbs-up {
+  transform: translate(0, -1px);
+}
+
+.i-message-square {
+  transform: translate(0, 1px);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  gap: 2rem;
+  padding: 1rem;
+  border-radius: 6px;
+  background: hsl(250, 12%, 18%);
+  width: 100%;
+  max-width: 30rem;
+  margin: 2rem auto;
+}
+form label {
+  vertical-align: middle;
+  display: inline-block;
+}
+form .sublabel {
+  color: #8898a5;
+  font-style: italic;
+}
+form > div {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+form > div:last-child {
+  align-items: flex-end;
 }
 
 nav {
@@ -375,17 +471,16 @@ nav {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  height: 3.5rem;
+  height: 4rem;
   padding: 0.5rem 12%;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  color: #eee9db;
-  background-color: #201288;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.2);
+  -webkit-backdrop-filter: blur(12px);
+          backdrop-filter: blur(12px);
 }
 nav > div {
   display: flex;
@@ -396,7 +491,7 @@ nav > div {
   white-space: nowrap;
 }
 nav a {
-  color: #eee9db;
+  color: #ebebeb;
 }
 
 #logo {
@@ -410,34 +505,7 @@ nav a {
   transform: rotate(366deg);
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
-  gap: 2rem;
-  padding: 1rem;
-  border-radius: 6px;
-  background: #e0d7c5;
-  width: 100%;
-  max-width: 30rem;
-  margin: 2rem auto;
-}
-form label {
-  vertical-align: middle;
-  display: inline-block;
-}
-form .sublabel {
-  color: #797d69;
-  font-style: italic;
-}
-form > div {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-form > div:last-child {
-  align-items: flex-end;
+#search {
+  margin: 1rem;
+  width: 20rem;
 }/*# sourceMappingURL=main.css.map */
