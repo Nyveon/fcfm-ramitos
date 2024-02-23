@@ -1,4 +1,4 @@
-from sqlalchemy import String
+from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from datetime import datetime
@@ -15,4 +15,8 @@ class User(db.Model):
     email_verified: Mapped[bool] = mapped_column(default=False)
     registration_date: Mapped[datetime] = mapped_column(
         default=datetime.utcnow
+    )
+
+    departamento_id: Mapped[int] = mapped_column(
+        ForeignKey("departamento.id", name="fk_user_departamento")
     )

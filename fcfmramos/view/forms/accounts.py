@@ -1,5 +1,7 @@
+import re
+
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, ValidationError
+from wtforms import StringField, PasswordField, SubmitField, ValidationError, SelectField
 from wtforms.validators import DataRequired, Email, Length
 
 
@@ -34,6 +36,14 @@ class SignupForm(FlaskForm):
             Email(INVALID_EMAIL),
             validate_email_domain,
         ],
+    )
+    username = StringField(
+        "Nombre de usuario", validators=[DataRequired(), Length(min=4, max=24)]
+    )
+    departamento = SelectField(
+        "Departamento",
+        coerce=int,
+        validators=[DataRequired()],
     )
     password = PasswordField(
         "Contraseña", validators=[DataRequired(), Length(min=8)]

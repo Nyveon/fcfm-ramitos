@@ -350,6 +350,20 @@ input[type=submit]:hover {
   background-color: #32a0c8;
 }
 
+select {
+  color: #090908;
+  background-color: #eee9db;
+  font-family: inherit;
+  font-size: inherit;
+  margin-right: 6px;
+  margin-bottom: 6px;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  outline: none;
+  border: 1px solid #998973;
+}
+
 .pill {
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
   padding: 2px;

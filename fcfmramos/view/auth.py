@@ -9,6 +9,7 @@ import pyrebase  # type: ignore
 
 from fcfmramos.model import db
 from fcfmramos.model.user import User
+from fcfmramos.model.course import Departamento
 from fcfmramos.view.forms.accounts import (
     LoginForm,
     SignupForm,
@@ -71,15 +72,9 @@ def login_email_password(email, password):
     session["user"] = user["localId"]
 
     local_user = User.query.filter_by(id=session["user"]).first()
+    print(local_user)
     if local_user is None:
-        new_user = User(
-            id=session["user"],
-            email=email,
-            username=email.split("@")[0],
-            email_verified=False,
-        )
-        db.session.add(new_user)
-        db.session.commit()
+        print("[ERROR] Ghost user?")
 
 
 @bp.route("/verify_email", methods=["GET"])
@@ -101,22 +96,44 @@ def send_verification_email():
 
 @bp.route("/signup", methods=["POST", "GET"])
 def signup():
+    departamentos_ug = Departamento.query.filter_by(is_ug=True).all()
     form = SignupForm()
+    form.departamento.choices = [
+        (d.id, d.nombre) for d in departamentos_ug
+    ]
 
     if "user" in session:
-        return {"message": "Ya estás ingresadx"}, 200
+        flash("Ya estás ingresadx", "info")
+        return redirect(url_for("main.index"))
 
     if form.validate_on_submit():
         email = form.email.data
-        # todo: if no @, insert @ug.uchile.cl
         password = form.password.data
+        username = form.username.data
 
         try:
+            print("Creating user in firebase")
             auth.create_user_with_email_and_password(email, password)
-            login_email_password(email, password)
+            user = auth.sign_in_with_email_and_password(email, password)
+            session["user_token"] = user["idToken"]
+            session["user"] = user["localId"]
+
+            print("Creating user in local database")
+            new_user = User(
+                id=session["user"],
+                email=email,
+                username=username,
+                email_verified=False,
+                departamento_id=form.departamento.data,
+            )
+            db.session.add(new_user)
+            db.session.commit()
+            print("Local user made")
 
             try:
-                auth.send_email_verification(session["user_token"])
+                print("[WARNING] Email verification disabled!")
+                # todo: re-enable this
+                # auth.send_email_verification(session["user_token"])
             except Exception as e:
                 print(f"Error sending email verification: {e}")
                 flash(
@@ -132,7 +149,9 @@ def signup():
             flash("Error en creación de cuenta", "error")
             return redirect(url_for("auth.signup"))
 
-    return render_template("auth/signup.html", form=form)
+    return render_template(
+        "auth/signup.html", form=form, departamentos=departamentos_ug
+    )
 
 
 @bp.route("/forgot_password", methods=["POST", "GET"])

@@ -14,6 +14,7 @@ class Departamento(db.Model):
     codigo: Mapped[str] = mapped_column(String(128), unique=True)
     ucampus_id: Mapped[int] = mapped_column(unique=True)
     color: Mapped[Optional[str]] = mapped_column(String(6))
+    is_ug: Mapped[bool] = mapped_column(default=False)
 
     ramos: Mapped[List["Ramo"]] = relationship(back_populates="departamento")
 

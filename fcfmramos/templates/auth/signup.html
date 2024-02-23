@@ -16,6 +16,28 @@
             {% endfor %}
         </div>
         <div>
+            {{ form.username.label }}
+            <p class="sublabel">Visible en reseñas, pero también puedes dejar opiniones anónimas! (4 a 24 cáracteres)</p>
+            {{ form.username(size=24) }}
+            {% for error in form.username.errors %}
+                <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.departamento.label }}
+            <p class="sublabel">Departamento al que perteneces</p>
+            {{ form.departamento() }}
+            {# <select id="departamento" name="departamento" required>
+                {% for departamento in departamentos %}
+                    <option value="{{ departamento.id }}">{{ departamento.nombre }}</option>
+                {% endfor %}
+            </select> #}
+
+            {% for error in form.departamento.errors %}
+                <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div>
             {{ form.password.label }}
             <p class="sublabel">(mínimo 8 carácteres)</p>
             {{ form.password(size=32) }}
