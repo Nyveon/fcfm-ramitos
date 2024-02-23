@@ -33,6 +33,11 @@ class Ramo(db.Model):
     departamento: Mapped["Departamento"] = relationship(back_populates="ramos")
 
     def serialize(self):
+        sorted_cursos = sorted(
+            self.cursos, key=lambda x: (x.año, x.semestre), reverse=True
+        )
+        latest_curso = sorted_cursos[0] if sorted_cursos else None
+
         return {
             "id": self.id,
             "codigo": self.codigo,
@@ -41,6 +46,11 @@ class Ramo(db.Model):
             "sct": self.sct,
             "sustentabilidad": self.sustentabilidad,
             "requisitos": self.requisitos,
+            "ultima_dictacion": (
+                f"{latest_curso.año}-{latest_curso.semestre}"
+                if latest_curso
+                else "Nunca"
+            ),
         }
 
 
