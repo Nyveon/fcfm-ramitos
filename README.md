@@ -52,7 +52,8 @@ flask --app fcfmramos db upgrade
 Populate with scraper data:
 
 ```bash
-flask --app fcfmramos scraper
+flask --app fcfmramos catalogos_scraper
+flask --app fcfmramos planes_scraper
 ```
 
 ## Running locally

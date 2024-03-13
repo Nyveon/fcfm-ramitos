@@ -32,9 +32,7 @@ DEPARTMENTS = [
         5, "Departamento de Ciencias de la Computación", "CC", "FFFFFF"
     ),
 ]
-PLANS = [
-    "41_5",
-]
+PLANS = {5: ["41_5"]}
 
 
 async def scrape_catalogos():
@@ -58,15 +56,34 @@ async def scrape_catalogos():
 
 async def scrape_planes():
     current_dir = Path(__file__).parent
+    # cache_path = current_dir / "planes_cache.pkl"  # Define cache file path
+
+    # # Check if cache exists and is not empty
+    # if cache_path.exists() and cache_path.stat().st_size > 0:
+    #     with open(cache_path, "rb") as cache_file:
+    #         try:
+    #             planes = pickle.load(cache_file)
+    #             print("Loaded data from cache.")
+    #             return planes
+    #         except (pickle.PickleError, EOFError):
+    #             print("Cache file is corrupted or unreadable, scraping again.")
+
+    # If cache does not exist or is corrupted, proceed with scraping
     ucampus_client = Client(load_cookies(current_dir / "ucampus.cookie"))
-
     planes = []
+    for departamento_id in PLANS:
+        for plan in PLANS[departamento_id]:
+            planes.append(
+                await scrape_plan(ucampus_client, plan, departamento_id)
+            )
 
-    for plan in PLANS:
-        planes.append(await scrape_plan(ucampus_client, plan))
+    # # Cache the result
+    # with open(cache_path, "wb") as cache_file:
+    #     pickle.dump(planes, cache_file)
+    #     print("Cached scraped data.")
 
     return planes
 
 
 if __name__ == "__main__":
-    asyncio.run(scrape_planes())
+    print(asyncio.run(scrape_planes()))

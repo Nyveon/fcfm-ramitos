@@ -1,7 +1,7 @@
 from typing import Optional, List
 
 from sqlalchemy import String, ForeignKey, Column, Table
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship, backref
 from sqlalchemy.sql.schema import UniqueConstraint
 
 from fcfmramos.model import db
@@ -20,6 +20,14 @@ class Departamento(db.Model):
     planes: Mapped[List["Plan"]] = relationship(back_populates="departamento")
 
 
+subplan_ramo = Table(
+    "subplan_ramo",
+    db.Model.metadata,
+    Column("subplan_id", ForeignKey("subplan.id"), primary_key=True),
+    Column("ramo_id", ForeignKey("ramo.id"), primary_key=True),
+)
+
+
 class Ramo(db.Model):
     __tablename__ = "ramo"
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -32,10 +40,6 @@ class Ramo(db.Model):
 
     cursos: Mapped[List["Curso"]] = relationship(back_populates="ramo")
     departamento: Mapped["Departamento"] = relationship(back_populates="ramos")
-
-    planes: Mapped[List["Plan"]] = relationship(
-        secondary="plan_ramo", back_populates="ramos"
-    )
 
     def serialize(self):
         sorted_cursos = sorted(
@@ -55,8 +59,14 @@ class Ramo(db.Model):
                 if latest_curso
                 else "Nunca"
             ),
-            "planes": [plan.id for plan in self.planes]
+            "planes": [plan.id for plan in self.planes],
         }
+
+    subplanes: Mapped[List["Subplan"]] = relationship(
+        "Subplan",
+        secondary=subplan_ramo,
+        back_populates="ramos"
+    )
 
 
 class Curso(db.Model):
@@ -108,19 +118,41 @@ class Plan(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     nombre: Mapped[str] = mapped_column(String(128), unique=True)
 
+    version: Mapped[int] = mapped_column()
     departamento_id: Mapped[int] = mapped_column(ForeignKey("departamento.id"))
 
     departamento: Mapped["Departamento"] = relationship(
         back_populates="planes"
     )
+    subplanes: Mapped[List["Subplan"]] = relationship(back_populates="plan")
+
+
+class Subplan(db.Model):
+    __tablename__ = "subplan"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    nombre: Mapped[str] = mapped_column(String(128))
+    plan_id: Mapped[int] = mapped_column(ForeignKey("plan.id"))
+    parent_subplan_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("subplan.id")
+    )
+
+    plan: Mapped["Plan"] = relationship("Plan", back_populates="subplanes")
+    parent_subplan: Mapped["Subplan"] = relationship(
+        "Subplan", remote_side=[id]
+    )
+    child_subplanes: Mapped[List["Subplan"]] = relationship(
+        "Subplan", back_populates="parent_subplan"
+    )
+
     ramos: Mapped[List["Ramo"]] = relationship(
-        secondary="plan_ramo", back_populates="planes"
+        "Ramo",
+        secondary=subplan_ramo,
+        back_populates="subplanes"
     )
 
 
-plan_ramo = Table(
-    "plan_ramo",
-    db.Model.metadata,
-    Column("plan_id", ForeignKey("plan.id"), primary_key=True),
-    Column("ramo_id", ForeignKey("ramo.id"), primary_key=True),
+Plan.subplanes = relationship("Subplan", back_populates="plan")
+Subplan.parent_subplan = relationship(
+    "Subplan", remote_side=[Subplan.id], back_populates="child_subplanes"
 )

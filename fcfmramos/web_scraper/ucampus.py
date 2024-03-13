@@ -65,7 +65,9 @@ class Catalogo:
 @dataclass
 class Plan:
     plan_id: str  # carrera_codigo + plan_codigo
-    suplanes: List["Subplan"]
+    nombre: str
+    subplanes: List["Subplan"]
+    departamento_id: int
 
 
 @dataclass

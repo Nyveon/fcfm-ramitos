@@ -44,11 +44,18 @@ def create_app():
     app.register_blueprint(main.bp)
     app.register_blueprint(auth.bp)
 
-    @app.cli.command()
-    def scraper():
-        from fcfmramos.populate import populate
+    @app.cli.command("catalogos_scraper")
+    def catalogos_scraper():
+        from fcfmramos.populate import populate_catalogos
 
         with app.app_context():
-            populate(db)
+            populate_catalogos(db)
+
+    @app.cli.command("planes_scraper")
+    def planes_scraper():
+        from fcfmramos.populate import populate_planes
+
+        with app.app_context():
+            populate_planes(db)
 
     return app

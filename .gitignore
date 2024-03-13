@@ -168,6 +168,7 @@ secrets.py
 # Scraping
 ucursos.cookie
 ucampus.cookie
+*.pkl
 
 # Tools
 SQLiteDatabaseBrowserPortable/
