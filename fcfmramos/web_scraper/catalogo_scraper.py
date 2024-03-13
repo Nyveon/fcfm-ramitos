@@ -1,5 +1,5 @@
 from typing import Dict
-from bs4 import BeautifulSoup, element
+from bs4 import element
 
 from fcfmramos.web_scraper.client import Client
 from fcfmramos.web_scraper.ucampus import (
@@ -11,13 +11,6 @@ from fcfmramos.web_scraper.ucampus import (
     Profesor,
     Departamento,
 )
-
-
-async def scrape(client: Client, url: str) -> BeautifulSoup:
-    response_code, html = await client.get(url)
-    if response_code != 200:
-        print(f"Failed to fetch {url} with response code {response_code}")
-    return BeautifulSoup(html, "html.parser")  # TODO: test swapping for lxtml
 
 
 def extract_programa_id(url: str) -> int | None:
@@ -142,8 +135,8 @@ async def scrape_catalogo(
 ) -> Catalogo:
     ramos: list[Ramo] = []
 
-    curso_soup = await scrape(
-        ucursos_client, get_institucion_cursos_url(semester, department.id)
+    curso_soup = await ucursos_client.scrape(
+        get_institucion_cursos_url(semester, department.id)
     )
     i_cursos = curso_soup.find(id="body")
     profe_lists = i_cursos.find_all("ul", class_="profes")
@@ -162,8 +155,8 @@ async def scrape_catalogo(
             id = anchor["href"].split("/")[-2]
             profes[name] = id
 
-    catalogo_soup = await scrape(
-        ucampus_client, get_catalogo_url(semester, department.id)
+    catalogo_soup = await ucampus_client.scrape(
+        get_catalogo_url(semester, department.id)
     )
     catalogo = catalogo_soup.find(id="body")
     ramo_divs = catalogo.find_all("div", class_="ramo")

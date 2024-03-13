@@ -4,7 +4,8 @@ from pathlib import Path
 from fcfmramos.web_scraper.client import Client, load_cookies
 
 # from cache import HashCache
-from fcfmramos.web_scraper.scraper import scrape_catalogo
+from fcfmramos.web_scraper.catalogo_scraper import scrape_catalogo
+from fcfmramos.web_scraper.plan_scraper import scrape_plan
 from fcfmramos.web_scraper.ucampus import Departamento
 
 
@@ -31,22 +32,15 @@ DEPARTMENTS = [
         5, "Departamento de Ciencias de la Computación", "CC", "FFFFFF"
     ),
 ]
+PLANS = [
+    "41_5",
+]
 
 
-async def main():
-    ucampus_client = Client()
-
-    # get this file's directory
+async def scrape_catalogos():
     current_dir = Path(__file__).parent
-    cookie_dir = current_dir / "cookie"
-    ucursos_client = Client(load_cookies(cookie_dir))
-    # TODO: all of this
-    # tasks = []
-
-    # page_cache = HashCache("pages")
-    # print(page_cache.has("Hi!"))
-    # page_cache.add("Hi!")
-    # page_cache.save()
+    ucampus_client = Client(load_cookies(current_dir / "ucampus.cookie"))
+    ucursos_client = Client(load_cookies(current_dir / "ucursos.cookie"))
 
     catalogos = []
 
@@ -62,5 +56,17 @@ async def main():
     return catalogos
 
 
+async def scrape_planes():
+    current_dir = Path(__file__).parent
+    ucampus_client = Client(load_cookies(current_dir / "ucampus.cookie"))
+
+    planes = []
+
+    for plan in PLANS:
+        planes.append(await scrape_plan(ucampus_client, plan))
+
+    return planes
+
+
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(scrape_planes())

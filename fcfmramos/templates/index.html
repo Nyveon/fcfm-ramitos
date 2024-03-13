@@ -1,73 +1,126 @@
-{% from "_macros.html" import icon %}
+{% from "_macros.html" import icon %} {% extends "_base.html" %} {% block title
+%}Home{% endblock %} {% block content %}
+<h1>Ramos FCFM</h1>
 
-{% extends "_base.html" %}
+<section x-data="courseData()">
+	<div role="toolbar" aria-label="Busqueda, filtros y ordenamiento">
+		<fieldset class="search" role="search">
+			<input
+				id="search"
+				x-ref="searchField"
+				x-model="search"
+				x-on:keydown.window.prevent.slash="$refs.searchField.focus()"
+				placeholder="Buscar un curso..."
+				type="search"
+			/>
+		</fieldset>
 
-{% block title %}Home{% endblock %}
+		<fieldset class="radio">
+			<legend>Ordenar por:</legend>
+			{% for key, name in { 'nombre': 'Nombre', 'codigo': 'Código', 'none': 'Ultima dictación' }.items() %}
+			<label for="sort-{{ key }}" title="{{ name }}">
+				<input
+					type="radio"
+					value="{{ key }}"
+					x-model="sorting"
+					name="sort"
+					id="sort-{{ key }}"
+				/>
+                {{ name }}
+			</label>
+			{% endfor %}
+		</fieldset>
 
+        <fieldset class="checkbox">
+            <legend>Filtrar por:</legend>
+            {% for plan in planes %}
+            <label for="plan-{{ plan.id }}" title="{{ plan.nombre }}">
+                <input
+                    type="checkbox"
+                    value="{{ plan.id }}"
+                    name="plan"
+                    id="plan-{{ plan.id }}"
+                    x-model="selectedPlanes"
+                />
+                {{ plan.nombre }}
+            </label>
+            {% endfor %}
+        </fieldset>
+	</div>
 
-{% block content %}
-    <h1>Ramos FCFM</h1>
+	<div id="courses">
+		<template x-for="course in filteredCourses" :key="course.id">
+            <div class="course-card"
+            x-show="true">
+                <span x-text="course.id"></span>
+				<div
+					class="course-bar top"
+					x-data="{tipo: ['Licenciatura', 'Especialidad', 'Obligatorio'][Math.floor(Math.random() * 3)]}"
+				>
+					<span class="left" x-text="course.codigo"></span>
+					<div class="right">
+						<div class="pill" x-text="tipo" :class="tipo">Electivo</div>
+					</div>
+				</div>
+				<span class="course-name" x-text="course.nombre"></span>
+				<div class="course-bar bottom">
+					<div class="left review-stats">
+						<div class="group">{{ icon('message-square') }}<span>4</span></div>
+						<div class="group">{{ icon('thumbs-up') }}<span>78%</span></div>
+					</div>
+					<div class="right">
+						<div class="group">
+							{{ icon('calendar') }}<span
+								x-text="course.ultima_dictacion"
+							></span>
+						</div>
+					</div>
+				</div>
+			</div>
 
-    <section x-data="loadCourses()">
+		</template>
+	</div>
 
-        <input
-            id="search"
-            x-ref="searchField"
-            x-model="search"
-            x-on:keydown.window.prevent.slash="$refs.searchField.focus()"
-            placeholder="Buscar un curso..."
-            type="search"
-        />
-        
-        <div id="courses">
-            <template x-for="course in filteredCourses" :key="course.id">
-                <div class="course-card">
-                    <div class="course-bar top" x-data="{tipo: ['Licenciatura', 'Especialidad', 'Obligatorio'][Math.floor(Math.random() * 3)]}">
-                        <span class="left" x-text="course.codigo"></span>
-                        <div class="right">
-                            <div class="pill" x-text="tipo" :class="tipo">Electivo</div>
-                        </div>
-                    </div>
-                    <span class="course-name" x-text="course.nombre"></span>
-                    <div class="course-bar bottom">
-                        <div class="left review-stats">
-                            <div class="group">{{ icon('message-square') }}<span>4</span></div>
-                            <div class="group">{{ icon('thumbs-up') }}<span>78%</span></div>
-                        </div>
-                        <div class="right">
-                            <div class="group">{{ icon('calendar') }}<span x-text="course.ultima_dictacion"></span></div>
-                        </div>
-                    </div>
-                </div>
-            </template>
-        </div>
+	<script>
+		function normalize(string) {
+		    return string.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+		}
 
-        <script>
-            function normalize(string) {
-                return string.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-            }
+        function courseData() {
+            return {
+                search: "",
+                sorting: "none",
+                selectedPlanes: [],
+                myForData: sourceData,
+		        get filteredCourses() {
+		            const searchString = normalize(this.search)
 
-            function loadCourses() {
-                return {
-                    search: "",
-                    myForData: sourceData,
-                    get filteredCourses() {
-                        console.log(this.search);
+		            return this.myForData.filter((ramo) => {
+                        const matchesSearch = normalize(ramo.nombre).includes(searchString) || normalize(ramo.codigo).includes(searchString);
+                        if (!matchesSearch) return false;
 
-                        if (!this.search) {
-                            return this.myForData;
+                        if (this.selectedPlanes.length > 0) {
+                            console.log(this.selectedPlanes)
+                            const coursePlanes = ramo.planes.map(plane => plane.toString()); // Assuming course.planes is an array of IDs
+                            const matchesPlane = this.selectedPlanes.some(selectedPlane => coursePlanes.includes(selectedPlane));
+                            if (!matchesPlane) return false;
                         }
 
-                        const searchString = normalize(this.search)
-
-                        return this.myForData.filter((item) => {
-                            return normalize(item.nombre).includes(searchString) || normalize(item.codigo).includes(searchString);
-                        });
-                    }
-                }
+		                return true;
+		            }).sort((a, b) => {
+                        if (this.sorting === "nombre") {
+                            return a.nombre.localeCompare(b.nombre);
+                        } else if (this.sorting === "codigo") {
+                            return a.codigo.localeCompare(b.codigo);
+                        } else {
+                            return b.ultima_dictacion.localeCompare(a.ultima_dictacion);
+                        }
+                    })
+		        }
             }
+        }
 
-            const sourceData = {{ courses | tojson | safe }};
-        </script>
-    </section>
+		const sourceData = {{ courses | tojson | safe }};
+	</script>
+</section>
 {% endblock %}

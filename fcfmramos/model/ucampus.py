@@ -17,6 +17,7 @@ class Departamento(db.Model):
     is_ug: Mapped[bool] = mapped_column(default=False)
 
     ramos: Mapped[List["Ramo"]] = relationship(back_populates="departamento")
+    planes: Mapped[List["Plan"]] = relationship(back_populates="departamento")
 
 
 class Ramo(db.Model):
@@ -32,12 +33,15 @@ class Ramo(db.Model):
     cursos: Mapped[List["Curso"]] = relationship(back_populates="ramo")
     departamento: Mapped["Departamento"] = relationship(back_populates="ramos")
 
+    planes: Mapped[List["Plan"]] = relationship(
+        secondary="plan_ramo", back_populates="ramos"
+    )
+
     def serialize(self):
         sorted_cursos = sorted(
             self.cursos, key=lambda x: (x.año, x.semestre), reverse=True
         )
         latest_curso = sorted_cursos[0] if sorted_cursos else None
-
         return {
             "id": self.id,
             "codigo": self.codigo,
@@ -51,6 +55,7 @@ class Ramo(db.Model):
                 if latest_curso
                 else "Nunca"
             ),
+            "planes": [plan.id for plan in self.planes]
         }
 
 
@@ -95,3 +100,27 @@ class Profesor(db.Model):
     cursos: Mapped[List["Curso"]] = relationship(
         secondary="curso_profesor", back_populates="profesores"
     )
+
+
+class Plan(db.Model):
+    __tablename__ = "plan"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    nombre: Mapped[str] = mapped_column(String(128), unique=True)
+
+    departamento_id: Mapped[int] = mapped_column(ForeignKey("departamento.id"))
+
+    departamento: Mapped["Departamento"] = relationship(
+        back_populates="planes"
+    )
+    ramos: Mapped[List["Ramo"]] = relationship(
+        secondary="plan_ramo", back_populates="planes"
+    )
+
+
+plan_ramo = Table(
+    "plan_ramo",
+    db.Model.metadata,
+    Column("plan_id", ForeignKey("plan.id"), primary_key=True),
+    Column("ramo_id", ForeignKey("ramo.id"), primary_key=True),
+)

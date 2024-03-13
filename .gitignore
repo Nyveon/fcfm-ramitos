@@ -163,8 +163,11 @@ cython_debug/
 # Firebase and keys
 fbconfig.json
 fcfm-ramos-key.json
-config.py
+secrets.py
 
-cookie
+# Scraping
+ucursos.cookie
+ucampus.cookie
 
+# Tools
 SQLiteDatabaseBrowserPortable/

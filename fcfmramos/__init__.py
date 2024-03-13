@@ -1,12 +1,12 @@
 from flask import Flask
 from flask import session
 
-from fcfmramos import config
+from fcfmramos import secrets
 
 
 def create_app():
     app = Flask(__name__)
-    app.secret_key = config.secret_key
+    app.secret_key = secrets.secret_key
 
     app.config.update(
         SESSION_COOKIE_SECURE=True,

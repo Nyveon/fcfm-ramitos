@@ -3,6 +3,7 @@ import aiohttp
 import atexit
 import random
 from typing import Tuple
+from bs4 import BeautifulSoup
 
 
 def load_cookies(path: str) -> dict:
@@ -42,6 +43,12 @@ class Client:
             await asyncio.sleep(random.uniform(0.1, 0.5))  # nosec
         async with self._session.get(url) as response:
             return (response.status, await response.text())
+
+    async def scrape(self, url: str) -> BeautifulSoup:
+        response_code, html = await self.get(url)
+        if response_code != 200:
+            print(f"Failed to fetch {url} with response code {response_code}")
+        return BeautifulSoup(html, "html.parser")
 
     def _close(self) -> None:
         asyncio.run(self._session.close())

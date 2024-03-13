@@ -3,19 +3,20 @@ from flask import render_template, redirect, url_for
 
 from fcfmramos.view.auth import is_logged_in
 from fcfmramos.model import db
-from fcfmramos.model.ucampus import Ramo
+from fcfmramos.model.ucampus import Ramo, Plan
 
 bp = Blueprint("main", __name__)
 
 
 @bp.route("/")
 def index():
-    # get all courses from database sqlalchemy
-
+    planes = db.session.query(Plan).filter_by(departamento_id=1).all()
     ramos = db.session.query(Ramo).all()
 
     return render_template(
-        "index.html", courses=[ramo.serialize() for ramo in ramos]
+        "index.html",
+        courses=[ramo.serialize() for ramo in ramos],
+        planes=planes
     )
 
 

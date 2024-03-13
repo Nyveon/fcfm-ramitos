@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import List
 
 from fcfmramos.web_scraper.config import (
     FCFM_CATALOGO_URL,
@@ -59,6 +60,30 @@ class Catalogo:
     semestre: int
     departamento: Departamento
     ramos: list[Ramo]
+
+
+@dataclass
+class Plan:
+    plan_id: str  # carrera_codigo + plan_codigo
+    suplanes: List["Subplan"]
+
+
+@dataclass
+class RamoInPlan:
+    codigo: str
+    nombre: str
+
+    def __init__(self, id: str):
+        s = id.split(" ")
+        self.codigo = s[0]
+        self.nombre = " ".join(s[1:])
+
+
+@dataclass
+class Subplan:
+    subplan_name: str
+    subplanes: List["Subplan"]
+    ramos: List[RamoInPlan]
 
 
 def get_sala_url(sala: int) -> str:
