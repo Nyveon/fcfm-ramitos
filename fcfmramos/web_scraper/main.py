@@ -6,7 +6,7 @@ from fcfmramos.web_scraper.client import Client, load_cookies
 # from cache import HashCache
 from fcfmramos.web_scraper.catalogo_scraper import scrape_catalogo
 from fcfmramos.web_scraper.plan_scraper import scrape_plan
-from fcfmramos.web_scraper.ucampus import Departamento
+from fcfmramos.web_scraper.ucampus import Departamento, Plan
 
 
 SEMESTERS = [
@@ -32,7 +32,11 @@ DEPARTMENTS = [
         5, "Departamento de Ciencias de la Computación", "CC", "FFFFFF"
     ),
 ]
-PLANS = {5: ["41_5"]}
+PLANS = [
+    Plan(
+        41, 5, "", [], 5
+    )
+]
 
 
 async def scrape_catalogos():
@@ -71,11 +75,10 @@ async def scrape_planes():
     # If cache does not exist or is corrupted, proceed with scraping
     ucampus_client = Client(load_cookies(current_dir / "ucampus.cookie"))
     planes = []
-    for departamento_id in PLANS:
-        for plan in PLANS[departamento_id]:
-            planes.append(
-                await scrape_plan(ucampus_client, plan, departamento_id)
-            )
+    for plan in PLANS:
+        planes.append(
+            await scrape_plan(ucampus_client, plan)
+        )
 
     # # Cache the result
     # with open(cache_path, "wb") as cache_file:

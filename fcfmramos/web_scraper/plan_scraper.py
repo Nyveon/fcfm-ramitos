@@ -7,34 +7,32 @@ from fcfmramos.web_scraper.ucampus import Plan, RamoInPlan, Subplan
 from bs4 import NavigableString
 
 
-def get_plan_url(plan_id: str) -> str:
+def get_plan_url(plan: Plan) -> str:
+    args = f"carr_codigo={plan.carr_codigo}&c_plan={plan.c_plan}"
     return (
-        f"https://ucampus.uchile.cl/m/fcfm_bia/recuento_uds?pla_id={plan_id}"
+        f"https://ucampus.uchile.cl/m/fcfm_bia/recuento_uds?{args}"
     )
 
 
-async def scrape_plan(
-    ucampus_client: Client, plan_id: str, departamento_id: int
-) -> Plan:
+async def scrape_plan(ucampus_client: Client, plan: Plan) -> Plan:
+    plan_id = f"{plan.carr_codigo}_{plan.c_plan}"
     current_dir = Path(__file__).parent
     cache_path = current_dir / ".cache" / f"soup_cache_{plan_id}.pkl"
     if os.path.exists(cache_path):
         print("Using cached soup")
-        with open(cache_path, 'rb') as cache_file:
+        with open(cache_path, "rb") as cache_file:
             soup = pickle.load(cache_file)
     else:
-        url = get_plan_url(plan_id)
+        url = get_plan_url(plan)
         soup = await ucampus_client.scrape(url)
 
         # Cache the soup for future use
-        with open(cache_path, 'wb') as cache_file:
+        with open(cache_path, "wb") as cache_file:
             pickle.dump(soup, cache_file)
 
     excel_table = soup.find("table", class_="excel")
     td_colspans2 = excel_table.find_all("td", colspan="2")
     tbodies = excel_table.find_all("tbody")
-
-    plan = Plan(plan_id, "", [], departamento_id)
 
     subplan_references = {}
 

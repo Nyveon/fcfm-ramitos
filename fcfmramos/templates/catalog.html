@@ -1,11 +1,21 @@
 {% from "macros/_icon.html" import icon %}
 {% from "macros/_course_card.html" import course_card %}
+{% from "macros/_subplan_card.html" import subplan_card %}
 {% extends "_base.html" %} {% block title
 %}Home{% endblock %} {% block content %}
-<h1>Ramos FCFM</h1>
+<h1>{{ subplan.nickname if subplan.nickname else subplan.nombre }}</h1>
+
+<section>
+    {% for child in subplans %}
+        {% if not child.absorb %}
+            {{ subplan_card(child) }}
+        {% endif %}
+    {% endfor %}
+</section>
+
 
 <section x-data="courseData()">
-	<div role="toolbar" aria-label="Busqueda, filtros y ordenamiento">
+	<div role="toolbar" aria-label="Busqueda, filtros y ordenamiento" x-show="sourceData.length != 0">
 		<fieldset class="search" role="search">
 			<input
 				id="search"

@@ -101,17 +101,17 @@ def populate_planes(db: SQLAlchemy) -> None:
 
 
 def insert_or_update_plan(db: SQLAlchemy, plan_data) -> None:
-    plan_id_values = plan_data.plan_id.split("_")
-    plan_id = int(plan_id_values[0])
-    version = int(plan_id_values[1])
-
-    plan = db.session.query(Plan).filter_by(id=plan_id).first()
+    plan = (
+        db.session.query(Plan)
+        .filter_by(carrera=plan_data.carr_codigo, version=plan_data.c_plan)
+        .first()
+    )
 
     if not plan:
         plan = Plan(
             nombre=plan_data.nombre,
-            id=plan_id,
-            version=version,
+            carrera=plan_data.carr_codigo,
+            version=plan_data.c_plan,
             departamento_id=plan_data.departamento_id,
         )
         db.session.add(plan)

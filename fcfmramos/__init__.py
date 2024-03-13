@@ -39,10 +39,11 @@ def create_app():
     def inject_verified():
         return dict(is_verified=auth.is_verified())
 
-    from fcfmramos.view import auth, main
+    from fcfmramos.view import auth, main, catalog
 
     app.register_blueprint(main.bp)
     app.register_blueprint(auth.bp)
+    app.register_blueprint(catalog.bp)
 
     @app.cli.command("catalogos_scraper")
     def catalogos_scraper():

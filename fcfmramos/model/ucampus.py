@@ -1,7 +1,7 @@
 from typing import Optional, List
 
 from sqlalchemy import String, ForeignKey, Column, Table
-from sqlalchemy.orm import Mapped, mapped_column, relationship, backref
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql.schema import UniqueConstraint
 
 from fcfmramos.model import db
@@ -59,13 +59,10 @@ class Ramo(db.Model):
                 if latest_curso
                 else "Nunca"
             ),
-            "planes": [plan.id for plan in self.planes],
         }
 
     subplanes: Mapped[List["Subplan"]] = relationship(
-        "Subplan",
-        secondary=subplan_ramo,
-        back_populates="ramos"
+        "Subplan", secondary=subplan_ramo, back_populates="ramos"
     )
 
 
@@ -117,7 +114,7 @@ class Plan(db.Model):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     nombre: Mapped[str] = mapped_column(String(128), unique=True)
-
+    carrera: Mapped[int] = mapped_column()
     version: Mapped[int] = mapped_column()
     departamento_id: Mapped[int] = mapped_column(ForeignKey("departamento.id"))
 
@@ -132,6 +129,8 @@ class Subplan(db.Model):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     nombre: Mapped[str] = mapped_column(String(128))
+    nickname: Mapped[Optional[str]] = mapped_column(String(128))
+    absorb: Mapped[Optional[bool]] = mapped_column(default=False)
     plan_id: Mapped[int] = mapped_column(ForeignKey("plan.id"))
     parent_subplan_id: Mapped[Optional[int]] = mapped_column(
         ForeignKey("subplan.id")
@@ -146,9 +145,7 @@ class Subplan(db.Model):
     )
 
     ramos: Mapped[List["Ramo"]] = relationship(
-        "Ramo",
-        secondary=subplan_ramo,
-        back_populates="subplanes"
+        "Ramo", secondary=subplan_ramo, back_populates="subplanes"
     )
 
 

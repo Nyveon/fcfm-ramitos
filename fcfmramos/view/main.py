@@ -15,8 +15,7 @@ def index():
 
     return render_template(
         "index.html",
-        courses=[ramo.serialize() for ramo in ramos],
-        planes=planes
+        courses=[ramo.serialize() for ramo in ramos]
     )
 
 

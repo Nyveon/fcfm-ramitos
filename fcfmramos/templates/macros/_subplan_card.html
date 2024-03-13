@@ -1,0 +1,7 @@
+{% macro subplan_card(subplan) %}
+<div class="subplan-card" x-show="true">
+    <a href="{{ url_for('catalog.subplan', subplan_id=subplan.id) }}">
+        <span>{{subplan.nickname if subplan.nickname else subplan.nombre}}</span>
+    </a>
+</div>
+{% endmacro %}

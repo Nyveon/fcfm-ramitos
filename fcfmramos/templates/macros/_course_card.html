@@ -1,0 +1,25 @@
+{% from "macros/_icon.html" import icon %}
+
+{% macro course_card(course) %}
+<div class="course-card" x-show="true">
+    <div class="course-bar top"
+        x-data="{tipo: ['Licenciatura', 'Especialidad', 'Obligatorio'][Math.floor(Math.random() * 3)]}">
+        <span class="left" x-text="course.codigo"></span>
+        <div class="right">
+            <div class="pill" x-text="tipo" :class="tipo">Electivo</div>
+        </div>
+    </div>
+    <span class="course-name" x-text="course.nombre"></span>
+    <div class="course-bar bottom">
+        <div class="left review-stats">
+            <div class="group">{{ icon('message-square') }}<span>4</span></div>
+            <div class="group">{{ icon('thumbs-up') }}<span>78%</span></div>
+        </div>
+        <div class="right">
+            <div class="group">
+                {{ icon('calendar') }}<span x-text="course.ultima_dictacion"></span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endmacro %}
