@@ -12,8 +12,11 @@ def create_app():
         SESSION_COOKIE_SECURE=True,
         SESSION_COOKIE_HTTPONLY=True,
         SESSION_COOKIE_SAMESITE="Strict",
-        SQLALCHEMY_DATABASE_URI="sqlite:///project.sqlite",
+        SQLALCHEMY_DATABASE_URI=f"postgresql://{secrets.postgres_user}:{secrets.postgres_password}@localhost:5432/fcfmramos",
+
     )
+
+    print(f"postgresql:///{secrets.postgres_user}:{secrets.postgres_password}@fcfmramos")
 
     from fcfmramos.model import db
     from flask_migrate import Migrate

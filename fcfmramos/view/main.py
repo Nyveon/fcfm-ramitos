@@ -14,7 +14,7 @@ def index():
     page = request.args.get('page', 1, type=int)
     search_query = request.args.get('search', '')
 
-    #ramos = db.session.execute(db.select(Ramo)).scalars()
+    # ramos = db.session.execute(db.select(Ramo)).scalars()
     query = db.select(Ramo)
     if search_query:
         query = query.where(or_(
