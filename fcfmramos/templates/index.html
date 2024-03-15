@@ -5,6 +5,13 @@
 %}Home{% endblock %} {% block content %}
 <h1>Ramos FCFM</h1>
 
+<div role="toolbar">
+    <form action="{{ url_for('main.index') }}" method="get">
+        <input type="text" name="search" placeholder="Buscar ramo..." value="{{ search_query }}">
+        <button type="submit">Buscar</button>
+    </form>
+</div>
+
 <section>
 	<div id="courses">
 		{% for ramo in serialized_ramos %}
