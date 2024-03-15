@@ -1,0 +1,82 @@
+{% from "macros/_icon.html" import icon %}
+{% from "macros/_course_card.html" import course_card %}
+{% from "macros/_pagination.html" import pagination %}
+{% extends "_base.html" %} {% block title
+%}Home{% endblock %} {% block content %}
+<h1>Ramos FCFM</h1>
+
+<section x-data="courseData()">
+	<div role="toolbar" aria-label="Busqueda, filtros y ordenamiento">
+		<fieldset class="search" role="search">
+			<input
+				id="search"
+				x-ref="searchField"
+				x-model="search"
+				x-on:keydown.window.prevent.slash="$refs.searchField.focus()"
+				placeholder="Buscar un curso..."
+				type="search"
+			/>
+		</fieldset>
+
+		<fieldset class="radio">
+			<legend>Ordenar por:</legend>
+			{% for key, name in { 'nombre': 'Nombre', 'codigo': 'Código', 'none': 'Ultima dictación' }.items() %}
+			<label for="sort-{{ key }}" title="{{ name }}">
+				<input
+					type="radio"
+					value="{{ key }}"
+					x-model="sorting"
+					name="sort"
+					id="sort-{{ key }}"
+				/>
+                {{ name }}
+			</label>
+			{% endfor %}
+		</fieldset>
+	</div>
+
+	<div id="courses">
+		<template x-for="course in filteredCourses" :key="course.id">
+            {{ course_card(course) }}
+		</template>
+	</div>
+
+    <div>
+        {{ pagination(ramos, "main.index") }}
+    </div>
+
+	<script>
+		function normalize(string) {
+		    return string.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+		}
+
+        function courseData() {
+            return {
+                search: "",
+                sorting: "none",
+                myForData: sourceData,
+		        get filteredCourses() {
+		            const searchString = normalize(this.search)
+
+		            return this.myForData.filter((ramo) => {
+                        const matchesSearch = normalize(ramo.nombre).includes(searchString) || normalize(ramo.codigo).includes(searchString);
+                        if (!matchesSearch) return false;
+
+		                return true;
+		            }).sort((a, b) => {
+                        if (this.sorting === "nombre") {
+                            return a.nombre.localeCompare(b.nombre);
+                        } else if (this.sorting === "codigo") {
+                            return a.codigo.localeCompare(b.codigo);
+                        } else {
+                            return b.ultima_dictacion.localeCompare(a.ultima_dictacion);
+                        }
+                    })
+		        }
+            }
+        }
+
+		const sourceData = {{ serialized_ramos | tojson | safe }};
+	</script>
+</section>
+{% endblock %}

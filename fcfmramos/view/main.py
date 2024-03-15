@@ -1,21 +1,24 @@
 from flask import Blueprint
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, url_for, request
 
 from fcfmramos.view.auth import is_logged_in
 from fcfmramos.model import db
-from fcfmramos.model.ucampus import Ramo, Plan
+from fcfmramos.model.ucampus import Ramo
 
 bp = Blueprint("main", __name__)
 
 
 @bp.route("/")
 def index():
-    planes = db.session.query(Plan).filter_by(departamento_id=1).all()
-    ramos = db.session.query(Ramo).all()
+    page = request.args.get('page', 1, type=int)
+
+    #ramos = db.session.execute(db.select(Ramo)).scalars()
+    ramos = db.paginate(db.select(Ramo), page=page, per_page=20)
 
     return render_template(
         "index.html",
-        courses=[ramo.serialize() for ramo in ramos]
+        ramos=ramos,
+        serialized_ramos=[ramo.serialize() for ramo in ramos.items]
     )
 
 

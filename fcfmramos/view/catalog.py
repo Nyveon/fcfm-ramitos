@@ -9,7 +9,7 @@ bp = Blueprint("catalog", __name__)
 
 @bp.route("/subplan/<int:subplan_id>")
 def subplan(subplan_id: int):
-    subplan = db.session.query(Subplan).get(subplan_id)
+    subplan = db.session.query(Subplan).get(subplan_id) # todo: outdate sqlalchemy syntax
     if subplan is None:
         return jsonify({"error": "Subplan not found"}), 404
 
@@ -45,7 +45,7 @@ def plan(plan_id: str):
         db.session.query(Plan)
         .filter_by(carrera=carrera_id, version=version)
         .first()
-    )
+    ) # todo: outdate sqlalchemy syntax
 
     subplans = plan.subplanes
     first_layer = [subplan for subplan in subplans[0].child_subplanes]
@@ -76,7 +76,7 @@ def get_subplan_tree(plan_id: str):
         db.session.query(Plan)
         .filter_by(carrera=carrera_id, version=version)
         .first()
-    )
+    ) # todo: outdate sqlalchemy syntax
     if plan is None:
         return jsonify({"error": "Plan not found"}), 404
 
