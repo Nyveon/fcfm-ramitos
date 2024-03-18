@@ -107,12 +107,16 @@ def insert_or_update_plan(db: SQLAlchemy, plan_data) -> None:
         .first()
     )
 
+    department = Departamento.query.filter_by(
+        ucampus_id=plan_data.departamento_id
+    ).first()
+
     if not plan:
         plan = Plan(
             nombre=plan_data.nombre,
             carrera=plan_data.carr_codigo,
             version=plan_data.c_plan,
-            departamento_id=plan_data.departamento_id,
+            departamento_id=department.id,
         )
         db.session.add(plan)
 
