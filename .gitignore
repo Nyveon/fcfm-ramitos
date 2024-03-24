@@ -172,3 +172,6 @@ ucampus.cookie
 
 # Tools
 SQLiteDatabaseBrowserPortable/
+
+.pre-commit-config.yaml
+.direnv/
