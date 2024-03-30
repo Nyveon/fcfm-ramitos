@@ -21,7 +21,7 @@
         });
   in {
     packages = forEachSupportedSystem ({pkgs, ...}: {
-      default = pkgs.callPackage ./fcfm-ramos.nix {};
+      default = pkgs.callPackage ./default.nix {};
     });
 
     checks = forEachSupportedSystem ({
