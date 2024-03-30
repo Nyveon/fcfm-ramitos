@@ -11,7 +11,10 @@
         inherit pname version;
         src = fetchPypi {
           inherit pname version;
-          hash = "sha256-Jw9oJ9ADnZiEYiLJ8mZGumxAHNibfAOMOr429IAdd1Q=";
+          hash = "sha256-5UFhI8tUtIP2IjmGvd0CCTkLuLBcIMfmKQjQ2tnc6RE=";
+          format = "wheel";
+          python = "py3";
+          dist = "py3";
         };
         format = "wheel";
       };
@@ -24,7 +27,10 @@
         src = fetchPypi {
           inherit version;
           pname = "firebase_admin";
-          hash = "sha256-Ssg+4Aq+aEmLnwjXAbVQp3s6We+6YQqeL7PXsVFRZsY=";
+          hash = "sha256-qgbxnwqoubkp2+XNE2d8m6Bf5/+BlWT0IKrgLGRcYyI=";
+          format = "wheel";
+          python = "py3";
+          dist = "py3";
         };
         format = "wheel";
       };
@@ -43,6 +49,13 @@ in
       name = "fcfm-ramos";
     };
     format = "pyproject";
-    nativeBuildInputs = with pythonPkgs; [flit-core]; # actual build inputs
-    buildInputs = with pythonPkgs; [flask flask-wtf pyrebase4 firebase-admin]; # runtime dependencies
+    # actual build inputs
+    nativeBuildInputs = with pythonPkgs; [flit-core];
+    # runtime dependencies
+    propagatedBuildInputs = with pythonPkgs; [
+      flask
+      flask-wtf
+      pyrebase4
+      firebase-admin
+    ];
   }
