@@ -20,8 +20,16 @@
           pkgs = import nixpkgs {inherit system;};
         });
   in {
-    packages = forEachSupportedSystem ({pkgs, ...}: {
-      default = pkgs.callPackage ./default.nix {};
+    packages = forEachSupportedSystem ({pkgs, ...}: let
+      fcfm-ramos = pkgs.callPackage ./default.nix {};
+    in {
+      inherit fcfm-ramos;
+      default = fcfm-ramos;
+      fcfm-ramos-image = pkgs.dockerTools.buildLayeredImage {
+        name = "fcfm-ramos";
+        tag = "latest";
+        contents = [fcfm-ramos];
+      };
     });
 
     checks = forEachSupportedSystem ({
