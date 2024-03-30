@@ -172,3 +172,10 @@ ucampus.cookie
 
 # Tools
 SQLiteDatabaseBrowserPortable/
+
+# Pre commit hooks
+.pre-commit-config.yaml
+# Direnv cache
+.direnv/
+# Nix result
+/result
